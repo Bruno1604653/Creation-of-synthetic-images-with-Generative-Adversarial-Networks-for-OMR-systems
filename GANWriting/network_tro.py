@@ -44,21 +44,21 @@ class ConTranModel(nn.Module):
                 cer_func[0].add(pred_xt, tr_label)
 
             l_total = w_dis * l_dis + w_rec * l_rec
-            l_total.backward()
+            l_total.backward(retain_graph=True)
             return l_total, l_dis, l_rec
 
         elif mode == 'dis_update':
             sample_img = tr_img
             sample_img = F.interpolate(sample_img, size=(128, 128))
             l_real = self.dis.calc_dis_real_loss(sample_img)
-            l_real.backward()
+            l_real.backward(retain_graph=True)
 
             with torch.no_grad():
                 generated_img = self.gen(tr_img)
                 generated_img = F.interpolate(generated_img, size=(128, 128))
 
             l_fake = self.dis.calc_dis_fake_loss(generated_img)
-            l_fake.backward()
+            l_fake.backward(retain_graph=True)
 
             l_total = l_real + l_fake
             if self.iter_num % self.show_iter_num == 0:
@@ -85,7 +85,7 @@ class ConTranModel(nn.Module):
             if cer_func:
                 cer_func.add(pred_xt, tr_label)
 
-            l_rec.backward()
+            l_rec.backward(retain_graph=True)
             return l_rec
 
         elif mode == 'eval':
