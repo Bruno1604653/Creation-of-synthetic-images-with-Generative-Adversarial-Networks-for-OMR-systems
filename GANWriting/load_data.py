@@ -46,7 +46,7 @@ class MusicSymbolDataset(Dataset):
                     for img_file in os.listdir(symbol_dir):
                         if img_file.endswith('.png'):
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol]))
-                            print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
+                            #print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
 
     def __len__(self):
         return len(self.data)
@@ -59,7 +59,7 @@ class MusicSymbolDataset(Dataset):
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
-        directories = ['./data/open_omr_raw','./dataset1/dataset1', './dataset2/dataset2', './data/open_omr_raw','./data/images']
+        directories = ['./dataset1/dataset1', './dataset2/dataset2', ]#'./data/open_omr_raw','./data/images', './data/open_pp_raw']
     
     train_dataset = MusicSymbolDataset(directories)
     test_dataset = MusicSymbolDataset(directories)
