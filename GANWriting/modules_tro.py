@@ -109,7 +109,7 @@ class DisModel(nn.Module):
 
         self.cnn_f = nn.Sequential(*cnn_f)
 
-        example_input = torch.randn(1, 1, 128, 128).to(device)
+        example_input = torch.randn(1, 1, 128, 128).to(device)  # Mover example_input al dispositivo correcto
         example_feat = self.cnn_f(example_input)
         flattened_size = np.prod(example_feat.shape[1:])
 
