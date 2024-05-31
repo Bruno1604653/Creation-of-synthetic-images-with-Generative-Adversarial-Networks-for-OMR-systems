@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import numpy as np
 import time
 import argparse
-from load_data import loadData as load_data_func
+from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEIGHT
 from network_tro import ConTranModel
 from loss_tro import CER
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
