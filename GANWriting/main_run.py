@@ -11,6 +11,7 @@ from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEI
 from network_tro import ConTranModel
 from loss_tro import CER
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 parser = argparse.ArgumentParser(description='seq2seq net', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('start_epoch', type=int, help='load saved weights from which epoch')
 args = parser.parse_args()
@@ -46,8 +47,6 @@ def compute_ssim(img1, img2):
     """Compute SSIM between two images."""
     img1 = img1.squeeze().cpu().numpy()  # Convert to numpy array
     img2 = img2.squeeze().cpu().numpy()  # Convert to numpy array
-    #print(f"img1 dim: {img1.shape}")
-    #print(f"img2 dim: {img2.shape}")
     if img1.ndim == 2:  # If grayscale, add channel dimension
         img1 = img1[..., np.newaxis]
     if img2.ndim == 2:  # If grayscale, add channel dimension
@@ -69,7 +68,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     print(len(train_loader))
     for i, train_data_list in enumerate(train_loader):
         train_data_list = [data.to(device) for data in train_data_list]  # Mover los datos al dispositivo
-        #print(i)
+
         '''rec update'''
         rec_opt.zero_grad()
         l_rec_tr = model(train_data_list, epoch, 'rec_update', cer_tr)
