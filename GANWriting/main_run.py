@@ -10,8 +10,8 @@ import argparse
 from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEIGHT, num_tokens
 from network_tro import ConTranModel
 from loss_tro import CER
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 parser = argparse.ArgumentParser(description='seq2seq net', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('start_epoch', type=int, help='load saved weights from which epoch')
 args = parser.parse_args()
@@ -44,15 +44,15 @@ def all_data_loader():
     return train_loader, test_loader
 
 def compute_ssim(img1, img2):
-    """Compute SSIM between dos imágenes."""
-    img1 = img1.squeeze().cpu().numpy()  # Convertir a array numpy
-    img2 = img2.squeeze().cpu().numpy()  # Convertir a array numpy
-    if img1.ndim == 2:  # Si es en escala de grises, añadir dimensión del canal
+    """Compute SSIM between two images."""
+    img1 = img1.squeeze().cpu().numpy()  # Convert to numpy array
+    img2 = img2.squeeze().cpu().numpy()  # Convert to numpy array
+    if img1.ndim == 2:  # If grayscale, add channel dimension
         img1 = img1[..., np.newaxis]
-    if img2.ndim == 2:  # Si es en escala de grises, añadir dimensión del canal
+    if img2.ndim == 2:  # If grayscale, add channel dimension
         img2 = img2[..., np.newaxis]
 
-    return ssim(img1, img2, win_size=7, channel_axis=-1, data_range=img1.max() - img1.min())
+    return ssim(img1, img2, channel_axis=-1, win_size=7, data_range=img1.max() - img1.min())
 
 def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     model.train()
@@ -65,7 +65,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     cer_te = CER()
     cer_te2 = CER()
     ssim_scores = []
-    print(len(train_loader))
+
     for i, train_data_list in enumerate(train_loader):
         train_data_list = [data.to(device) for data in train_data_list]  # Mover los datos al dispositivo
 
@@ -104,8 +104,6 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
         # Limpiar memoria no utilizada
         del l_total, l_dis, l_rec, l_dis_tr, l_rec_tr
         torch.cuda.empty_cache()
-        #if i == 5:
-        #    break
 
     fl_dis = np.mean(loss_dis)
     fl_dis_tr = np.mean(loss_dis_tr)
@@ -116,7 +114,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     res_cer_tr = cer_tr.fin()
     res_cer_te = cer_te.fin()
     res_cer_te2 = cer_te2.fin()
-    print("A")
+
     print('epo%d <tr>-<gen>: l_dis=%.2f-%.2f, l_rec=%.2f-%.2f, cer=%.2f-%.2f-%.2f, ssim=%.4f, time=%.1f' % (epoch, fl_dis_tr, fl_dis, fl_rec_tr, fl_rec, res_cer_tr, res_cer_te, res_cer_te2, avg_ssim, time.time() - time_s))
     return res_cer_te + res_cer_te2, avg_ssim
 
@@ -224,6 +222,7 @@ def rm_old_model(index):
             os.system('rm save_weights/contran-' + str(epoch) + '.model')
 
 if __name__ == '__main__':
+    print(f"Network_tro.py vocab_size: {vocab_size}")
     print(time.ctime())
     train_loader, test_loader = all_data_loader()
     main(train_loader, test_loader)

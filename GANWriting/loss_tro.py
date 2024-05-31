@@ -71,11 +71,11 @@ class CER():
             lens.append(len(gt_text))
         self.ed += sum(eds)
         self.len += sum(lens)
-        #print(f"Added {batch_size} items. Total len: {self.len}, Total ed: {self.ed}")
+        print(f"Added {batch_size} items. Total len: {self.len}, Total ed: {self.ed}")
 
     def fin(self):
         if self.len == 0:
-            #print("Warning: self.len is 0, returning 0 to avoid division by zero")
+            print("Warning: self.len is 0, returning 0 to avoid division by zero")
             return 0
         return 100 * (self.ed / self.len)
 

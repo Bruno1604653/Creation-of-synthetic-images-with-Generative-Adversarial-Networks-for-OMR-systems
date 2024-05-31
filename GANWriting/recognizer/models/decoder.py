@@ -5,6 +5,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class Decoder(nn.Module):
     def __init__(self, hidden_size, embedding_size, vocab_size, attention, tradeoff_context_embed):
+        print("vocab_size", vocab_size)
         super(Decoder, self).__init__()
         self.hidden_size = hidden_size
         self.embed_size = embedding_size
