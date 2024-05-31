@@ -21,6 +21,7 @@ tokens = {
 vocab_size = None  # Inicializar vocab_size
 index2letter = None  # Inicializar index2letter
 num_tokens = 4
+
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
         global tokens
@@ -118,4 +119,4 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
     return train_loader, test_loader
 
 # Definir vocab_size, IMG_WIDTH, IMG_HEIGHT para importación
-__all__ = ['loadData', 'vocab_size', 'IMG_WIDTH', 'IMG_HEIGHT','num_tokens']
+__all__ = ['loadData', 'vocab_size', 'IMG_WIDTH', 'IMG_HEIGHT', 'num_tokens']
