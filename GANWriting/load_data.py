@@ -29,9 +29,9 @@ class MusicSymbolDataset(Dataset):
         self.data = []
         self.classes = []
         for data_dir in data_dirs:
-            print(f"Procesando directorio: {data_dir}")
+            #print(f"Procesando directorio: {data_dir}")
             if not os.path.exists(data_dir):
-                print(f"Directorio no existe: {data_dir}")
+                #print(f"Directorio no existe: {data_dir}")
                 continue
             for symbol in os.listdir(data_dir):
                 symbol_dir = os.path.join(data_dir, symbol)
@@ -41,18 +41,19 @@ class MusicSymbolDataset(Dataset):
                         tokens[symbol_lower] = len(tokens)
                     if symbol_lower not in self.classes:
                         self.classes.append(symbol_lower)
-                    print(f"Existente: {symbol_dir}")
+                    #print(f"Existente: {symbol_dir}")
                     png_count = 0
                     for img_file in os.listdir(symbol_dir):
                         if img_file.lower().endswith('.png'):
                             png_count += 1
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol_lower]))
-                            print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
-                    print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
+                            #print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
+                    #print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
                 else:
-                    print(f"Directorio no encontrado para símbolo: {symbol_dir}")
-        print(f"Total de imágenes encontradas: {len(self.data)}")
-        print(f"Clases encontradas: {self.classes}")
+                    pass
+                    #print(f"Directorio no encontrado para símbolo: {symbol_dir}")
+        #print(f"Total de imágenes encontradas: {len(self.data)}")
+        #print(f"Clases encontradas: {self.classes}")
 
     def __len__(self):
         return len(self.data)
