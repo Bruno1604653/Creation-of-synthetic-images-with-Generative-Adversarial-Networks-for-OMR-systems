@@ -38,13 +38,15 @@ class MusicSymbolDataset(Dataset):
         ])
         self.data = []
         for data_dir in data_dirs:
+            print(f"Procesando directorio: {data_dir}")
             for symbol in MUSICAL_SYMBOLS:
                 symbol_dir = os.path.join(data_dir, symbol)
                 if os.path.exists(symbol_dir):
-                    print(f"Exist{symbol_dir}")
+                    print(f"Existente: {symbol_dir}")
                     for img_file in os.listdir(symbol_dir):
                         if img_file.endswith('.png'):
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol]))
+                            print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
 
     def __len__(self):
         return len(self.data)
@@ -53,12 +55,12 @@ class MusicSymbolDataset(Dataset):
         img_path, label = self.data[idx]
         image = Image.open(img_path).convert('RGB')
         image = self.transform(image)
-        #print(f"Loaded image shape: {image.shape}")  # Add this line to print the shape of each loaded image
         return image, label
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
-        directories = ['./data/open_omr_raw','./dataset1/dataset1', './dataset2/dataset2', './data/open_omr_raw','./data/images']#,
+        directories = ['./data/open_omr_raw','./dataset1/dataset1', './dataset2/dataset2', './data/open_omr_raw','./data/images']
+    
     train_dataset = MusicSymbolDataset(directories)
     test_dataset = MusicSymbolDataset(directories)
 
@@ -67,8 +69,10 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
 
     if len(test_dataset) == 0:
         raise ValueError("El dataset de prueba está vacío")
-    # print(f"\nlen(train_dataset): {len(train_dataset)}")
-    # print(f"\nlen(test_dataset): {len(test_dataset)}")
+
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
+
+# Ejemplo de uso
+train_loader, test_loader = loadData(oov=True)
