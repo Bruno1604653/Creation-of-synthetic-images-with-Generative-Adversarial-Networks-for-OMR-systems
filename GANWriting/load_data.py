@@ -43,10 +43,14 @@ class MusicSymbolDataset(Dataset):
                 symbol_dir = os.path.join(data_dir, symbol)
                 if os.path.exists(symbol_dir):
                     print(f"Existente: {symbol_dir}")
+                    png_count = 0
                     for img_file in os.listdir(symbol_dir):
-                        if img_file.endswith('.png'):
+                        if img_file.lower().endswith('.png'):
+                            png_count += 1
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol]))
                             #print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
+                    print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
+        print(f"Total de imágenes encontradas: {len(self.data)}")
 
     def __len__(self):
         return len(self.data)
