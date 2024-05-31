@@ -10,7 +10,7 @@ import argparse
 from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEIGHT, num_tokens
 from network_tro import ConTranModel
 from loss_tro import CER
-
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 parser = argparse.ArgumentParser(description='seq2seq net', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('start_epoch', type=int, help='load saved weights from which epoch')
