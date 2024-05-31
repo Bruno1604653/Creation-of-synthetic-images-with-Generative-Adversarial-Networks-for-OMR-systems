@@ -47,8 +47,8 @@ class MusicSymbolDataset(Dataset):
                 symbol_dir = os.path.join(data_dir, symbol)
                 if os.path.isdir(symbol_dir):
                     symbol_lower = symbol.lower()
-                    if symbol_lower not in tokens:
-                        tokens[symbol_lower] = len(tokens)
+                    if symbol_lower not in _tokens:
+                        _tokens[symbol_lower] = len(_tokens)
                     if symbol_lower not in self.classes:
                         self.classes.append(symbol_lower)
                     print(f"Existente: {symbol_dir}")
@@ -56,12 +56,15 @@ class MusicSymbolDataset(Dataset):
                     for img_file in os.listdir(symbol_dir):
                         if img_file.lower().endswith('.png'):
                             png_count += 1
-                            self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol_lower]))
+                            label = _tokens[symbol_lower]
+                            if label >= vocab_size:
+                                print(f"Warning: Label {label} for {symbol_lower} exceeds vocab size {vocab_size}")
+                                continue
+                            self.data.append((os.path.join(symbol_dir, img_file), label))
                             print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
-                    #print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
+                    print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
                 else:
-                    pass
-                    #print(f"Directorio no encontrado para símbolo: {symbol_dir}")
+                    print(f"Directorio no encontrado para símbolo: {symbol_dir}")
         print(f"Total de imágenes encontradas: {len(self.data)}")
         print(f"Clases encontradas: {self.classes}")
 
@@ -70,10 +73,10 @@ class MusicSymbolDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path, label = self.data[idx]
-        image = Image.open(img_path).convert('RGB')
+        image = Image.open(img_path).convert('RGB')  # Convertir a RGB
         image = self.transform(image)
-        #print(f"Loaded image shape: {image.shape}")  # Add this line to print the shape of each loaded image
         return image, label
+
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
