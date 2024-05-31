@@ -21,7 +21,6 @@ tokens = {
 vocab_size = None  # Inicializar vocab_size
 index2letter = None  # Inicializar index2letter
 num_tokens = 4
-
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
         global tokens
@@ -101,8 +100,8 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
         tokens[symbol] = i + 4
 
     index2letter = {v: k for k, v in tokens.items()}
-    vocab_size = len(tokens)
-    num_tokens = 4
+    num_classes = len(found_classes)
+    vocab_size = num_classes + num_tokens
 
     # Cargar el dataset
     train_dataset = MusicSymbolDataset(directories)
