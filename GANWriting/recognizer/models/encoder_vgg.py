@@ -61,7 +61,7 @@ class Encoder(nn.Module):
                 out_short[i] = torch.cat(part_out, 1)
             out = self.output_proj(out_short)
         width = out.shape[0]
-        src_len = in_data_len.numpy() * (width / self.width)
+        src_len = in_data_len.cpu().numpy() * (width / self.width)
         src_len = src_len + 0.999
         src_len = src_len.astype('int')
         out = pack_padded_sequence(out, src_len.tolist(), batch_first=False)
@@ -89,4 +89,3 @@ class Encoder(nn.Module):
                 matrix_out[i, :le] = matrix_new[i, :le]
         matrix_out = matrix_out.permute(0, 2, 3, 1)
         return matrix_out
-
