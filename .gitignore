@@ -8,3 +8,4 @@ dataset2
 datasets
 __pycache__
 GANWriting/__pycache__imgs/
+save_weights/
