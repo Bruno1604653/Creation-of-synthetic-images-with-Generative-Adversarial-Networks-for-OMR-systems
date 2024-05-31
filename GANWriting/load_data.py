@@ -30,11 +30,10 @@ NUM_CHANNEL = 3
 print(f"vocab_size: {vocab_size}")
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
-        global tokens
+        global _tokens
         self.data_dirs = data_dirs
         self.transform = transform or transforms.Compose([
             transforms.Resize((IMG_HEIGHT, IMG_WIDTH)),
-            transforms.Grayscale(num_output_channels=1),
             transforms.ToTensor()
         ])
         self.data = []
