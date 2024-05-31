@@ -2,6 +2,8 @@ import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 import torch
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 __all__ = [
     'VGG', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn',
     'vgg19_bn', 'vgg19',
@@ -68,7 +70,7 @@ def vgg11(pretrained=False, **kwargs):
     model = VGG(make_layers(cfg['A']), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg11']))
-    return model
+    return model.to(device)
 
 def vgg11_bn(pretrained=False, **kwargs):
     if pretrained:
@@ -76,7 +78,7 @@ def vgg11_bn(pretrained=False, **kwargs):
     model = VGG(make_layers(cfg['A'], batch_norm=True), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg11_bn']))
-    return model
+    return model.to(device)
 
 def vgg13(pretrained=False, **kwargs):
     if pretrained:
@@ -84,7 +86,7 @@ def vgg13(pretrained=False, **kwargs):
     model = VGG(make_layers(cfg['B']), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg13']))
-    return model
+    return model.to(device)
 
 def vgg13_bn(pretrained=False, **kwargs):
     if pretrained:
@@ -92,7 +94,7 @@ def vgg13_bn(pretrained=False, **kwargs):
     model = VGG(make_layers(cfg['B'], batch_norm=True), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg13_bn']))
-    return model
+    return model.to(device)
 
 def vgg16(pretrained=False, **kwargs):
     if pretrained:
@@ -100,7 +102,7 @@ def vgg16(pretrained=False, **kwargs):
     model = VGG(make_layers(cfg['D']), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg16']))
-    return model
+    return model.to(device)
 
 def vgg16_bn(pretrained=False, **kwargs):
     if pretrained:
@@ -113,7 +115,7 @@ def vgg16_bn(pretrained=False, **kwargs):
         model.load_state_dict(partial_dict)
     else:
         model = VGG(make_layers(cfg['D'], batch_norm=True), **kwargs)
-    return model
+    return model.to(device)
 
 def vgg19(pretrained=False, **kwargs):
     if pretrained:
@@ -121,7 +123,7 @@ def vgg19(pretrained=False, **kwargs):
     model = VGG(make_layers(cfg['E']), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg19']))
-    return model
+    return model.to(device)
 
 def vgg19_bn(pretrained=False, **kwargs):
     if pretrained:
@@ -134,4 +136,4 @@ def vgg19_bn(pretrained=False, **kwargs):
         model.load_state_dict(partial_dict)
     else:
         model = VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
-    return model
+    return model.to(device)
