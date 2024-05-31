@@ -4,8 +4,6 @@ import random
 
 ##print_shape_flag = False
 
-cpu = torch.device('cpu')
-cuda = torch.device('cuda')
 device = torch.device('cpu' if not torch.cuda.is_available() else 'cuda')
 
 class Seq2Seq(nn.Module):
