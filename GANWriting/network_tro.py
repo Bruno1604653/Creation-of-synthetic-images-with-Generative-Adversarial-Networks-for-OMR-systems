@@ -71,16 +71,16 @@ class ConTranModel(nn.Module):
             self.iter_num += 1
             generated_img = self.gen(tr_img)
             generated_img = F.interpolate(generated_img, size=(128, 128))
-            print(f"generated_img.requires_grad: {generated_img.requires_grad}")
-            
+            #print(f"generated_img.requires_grad: {generated_img.requires_grad}")
+
             pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
-            print(f"pred_xt.requires_grad: {pred_xt.requires_grad}")
+            #print(f"pred_xt.requires_grad: {pred_xt.requires_grad}")
 
             log_softmax_pred_xt = log_softmax(pred_xt.reshape(-1, vocab_size))
-            print(f"log_softmax_pred_xt.requires_grad: {log_softmax_pred_xt.requires_grad}")
+            #print(f"log_softmax_pred_xt.requires_grad: {log_softmax_pred_xt.requires_grad}")
 
             l_rec = crit(log_softmax_pred_xt, tr_label.reshape(-1))
-            print(f"l_rec.requires_grad: {l_rec.requires_grad}")
+            #print(f"l_rec.requires_grad: {l_rec.requires_grad}")
 
             if cer_func:
                 cer_func.add(pred_xt, tr_label)
