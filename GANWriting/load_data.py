@@ -30,7 +30,7 @@ NUM_CHANNEL = 3
 print(f"vocab_size: {vocab_size}")
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
-        global _tokens
+        global tokens
         self.data_dirs = data_dirs
         self.transform = transform or transforms.Compose([
             transforms.Resize((IMG_HEIGHT, IMG_WIDTH)),
@@ -47,8 +47,8 @@ class MusicSymbolDataset(Dataset):
                 symbol_dir = os.path.join(data_dir, symbol)
                 if os.path.isdir(symbol_dir):
                     symbol_lower = symbol.lower()
-                    if symbol_lower not in _tokens:
-                        _tokens[symbol_lower] = len(_tokens)
+                    if symbol_lower not in tokens:
+                        tokens[symbol_lower] = len(tokens)
                     if symbol_lower not in self.classes:
                         self.classes.append(symbol_lower)
                     print(f"Existente: {symbol_dir}")
@@ -56,7 +56,7 @@ class MusicSymbolDataset(Dataset):
                     for img_file in os.listdir(symbol_dir):
                         if img_file.lower().endswith('.png'):
                             png_count += 1
-                            label = _tokens[symbol_lower]
+                            label = tokens[symbol_lower]
                             if label >= vocab_size:
                                 print(f"Warning: Label {label} for {symbol_lower} exceeds vocab size {vocab_size}")
                                 continue
