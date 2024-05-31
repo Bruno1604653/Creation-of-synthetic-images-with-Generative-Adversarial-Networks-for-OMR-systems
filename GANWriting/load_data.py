@@ -20,7 +20,7 @@ tokens = {
 
 vocab_size = None  # Inicializar vocab_size
 index2letter = None  # Inicializar index2letter
-
+num_tokens = 4
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
         global tokens
@@ -81,7 +81,7 @@ def get_classes_from_directories(directories):
 
 # Cargar datos y definir tokens y vocabulario
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
-    global tokens, vocab_size, index2letter
+    global tokens, vocab_size, index2letter, num_tokens
 
     if directories is None:
         directories = ['./dataset1/dataset1', './dataset2/dataset2', './data/open_omr_raw', './data/images', './data/muscima_pp_raw']
