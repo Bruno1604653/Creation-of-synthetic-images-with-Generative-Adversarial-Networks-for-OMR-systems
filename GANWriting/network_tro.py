@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
 from torch import nn
-from load_data import vocab_size, IMG_WIDTH, IMG_HEIGHT
+from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEIGHT
 from modules_tro import GenModel_FC, DisModel, RecModel, write_image
 from loss_tro import recon_criterion, crit, log_softmax
 import numpy as np
