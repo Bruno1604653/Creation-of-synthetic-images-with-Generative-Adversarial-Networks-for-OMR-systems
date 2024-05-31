@@ -18,8 +18,12 @@ tokens = {
     'UNK_TOKEN': 3
 }
 
+vocab_size = None  # Inicializar vocab_size
+index2letter = None  # Inicializar index2letter
+
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
+        global tokens
         self.data_dirs = data_dirs
         self.transform = transform or transforms.Compose([
             transforms.Resize((IMG_HEIGHT, IMG_WIDTH)),
@@ -111,3 +115,6 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
+
+# Definir vocab_size, IMG_WIDTH, IMG_HEIGHT para importación
+__all__ = ['loadData', 'vocab_size', 'IMG_WIDTH', 'IMG_HEIGHT']
