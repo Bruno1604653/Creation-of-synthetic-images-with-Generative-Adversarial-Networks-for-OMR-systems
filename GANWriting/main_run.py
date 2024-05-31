@@ -120,6 +120,7 @@ def test(test_loader, epoch, modelFile_o_model):
     return res_cer_te + res_cer_te2
 
 def main(train_loader, test_loader):
+    print(f"Device: {device}")
     model = ConTranModel(show_iter_num, OOV).to(device)
     if CurriculumModelID > 0:
         model_file = 'save_weights/contran-' + str(CurriculumModelID) + '.model'
