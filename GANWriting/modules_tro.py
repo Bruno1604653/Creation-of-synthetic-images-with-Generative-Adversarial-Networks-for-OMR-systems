@@ -8,7 +8,7 @@ from recognizer.models.encoder_vgg import Encoder as rec_encoder
 from recognizer.models.decoder import Decoder as rec_decoder
 from recognizer.models.seq2seq import Seq2Seq as rec_seq2seq
 from recognizer.models.attention import locationAttention as rec_attention
-from load_data import IMG_HEIGHT, IMG_WIDTH, vocab_size, index2letter, num_tokens, tokens
+from load_data import IMG_HEIGHT, IMG_WIDTH, index2letter, num_tokens, tokens
 import cv2
 
 device = torch.device('cpu' if not torch.cuda.is_available() else 'cuda')
@@ -200,7 +200,7 @@ class Decoder(nn.Module):
         return self.model(x.to(device))
 
 class RecModel(nn.Module):
-    def __init__(self, pretrain=False):
+    def __init__(self, vocab_size, pretrain=False):
         super(RecModel, self).__init__()
         hidden_size_enc = hidden_size_dec = 512
         embed_size = 60

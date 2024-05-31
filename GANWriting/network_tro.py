@@ -17,7 +17,7 @@ class ConTranModel(nn.Module):
         super(ConTranModel, self).__init__()
         self.gen = GenModel_FC().to(device)
         self.dis = DisModel().to(device)
-        self.rec = RecModel(pretrain=False).to(device)
+        self.rec = RecModel(vocab_size=vocab_size, pretrain=False).to(device)
         self.iter_num = 0
         self.show_iter_num = show_iter_num
         self.oov = oov
