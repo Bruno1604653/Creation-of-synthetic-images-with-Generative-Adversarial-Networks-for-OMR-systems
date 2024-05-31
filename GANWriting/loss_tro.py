@@ -71,7 +71,7 @@ class CER():
             lens.append(len(gt_text))
         self.ed += sum(eds)
         self.len += sum(lens)
-        print(f"Added {batch_size} items. Total len: {self.len}, Total ed: {self.ed}")
+        #print(f"Added {batch_size} items. Total len: {self.len}, Total ed: {self.ed}")
 
     def fin(self):
         if self.len == 0:

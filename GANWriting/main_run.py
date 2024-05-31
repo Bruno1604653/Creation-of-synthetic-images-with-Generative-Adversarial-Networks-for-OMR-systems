@@ -67,6 +67,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     ssim_scores = []
 
     for i, train_data_list in enumerate(train_loader):
+        print(i)
         train_data_list = [data.to(device) for data in train_data_list]  # Mover los datos al dispositivo
 
         '''rec update'''
