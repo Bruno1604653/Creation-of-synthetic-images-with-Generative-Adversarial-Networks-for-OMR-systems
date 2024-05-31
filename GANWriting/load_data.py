@@ -58,8 +58,7 @@ class MusicSymbolDataset(Dataset):
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
-        directories = ['./data/open_omr_raw','./dataset1', './dataset2', './data/open_omr_raw','./data/images']#,
-
+        directories = ['./data/open_omr_raw','./dataset1/dataset1', './dataset2/dataset2', './data/open_omr_raw','./data/images']#,
     train_dataset = MusicSymbolDataset(directories)
     test_dataset = MusicSymbolDataset(directories)
 
