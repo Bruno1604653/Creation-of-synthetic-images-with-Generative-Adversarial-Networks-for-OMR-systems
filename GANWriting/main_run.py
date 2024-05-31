@@ -44,15 +44,15 @@ def all_data_loader():
     return train_loader, test_loader
 
 def compute_ssim(img1, img2):
-    """Compute SSIM between two images."""
-    img1 = img1.squeeze().cpu().numpy()  # Convert to numpy array
-    img2 = img2.squeeze().cpu().numpy()  # Convert to numpy array
-    if img1.ndim == 2:  # If grayscale, add channel dimension
+    """Compute SSIM between dos imágenes."""
+    img1 = img1.squeeze().cpu().numpy()  # Convertir a array numpy
+    img2 = img2.squeeze().cpu().numpy()  # Convertir a array numpy
+    if img1.ndim == 2:  # Si es en escala de grises, añadir dimensión del canal
         img1 = img1[..., np.newaxis]
-    if img2.ndim == 2:  # If grayscale, add channel dimension
+    if img2.ndim == 2:  # Si es en escala de grises, añadir dimensión del canal
         img2 = img2[..., np.newaxis]
 
-    return ssim(img1, img2, multichannel=True, win_size=7, channel_axis=-1, data_range=img1.max() - img1.min())
+    return ssim(img1, img2, win_size=7, channel_axis=-1, data_range=img1.max() - img1.min())
 
 def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     model.train()
