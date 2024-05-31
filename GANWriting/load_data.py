@@ -101,6 +101,7 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
 
     index2letter = {v: k for k, v in tokens.items()}
     vocab_size = len(tokens)
+    num_tokens = 4
 
     # Cargar el dataset
     train_dataset = MusicSymbolDataset(directories)
@@ -117,4 +118,4 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
     return train_loader, test_loader
 
 # Definir vocab_size, IMG_WIDTH, IMG_HEIGHT para importación
-__all__ = ['loadData', 'vocab_size', 'IMG_WIDTH', 'IMG_HEIGHT']
+__all__ = ['loadData', 'vocab_size', 'IMG_WIDTH', 'IMG_HEIGHT','num_tokens']
