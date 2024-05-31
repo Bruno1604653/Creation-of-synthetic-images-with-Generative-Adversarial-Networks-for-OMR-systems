@@ -26,7 +26,7 @@ for i, symbol in enumerate(MUSICAL_SYMBOLS):
 index2letter = {v: k for k, v in tokens.items()}
 vocab_size = len(tokens)
 num_tokens = 4
-NUM_CHANNEL = 1
+NUM_CHANNEL = 3
 print(f"vocab_size: {vocab_size}")
 class MusicSymbolDataset(Dataset):
     def __init__(self, data_dirs, transform=None):
