@@ -36,10 +36,10 @@ class ConTranModel(nn.Module):
             self.iter_num += 1
             tr_img.requires_grad_()  # Asegurando que tr_img tenga requires_grad=True
             generated_img = self.gen(tr_img)
-            generated_img = F.interpolate(generated_img, size=(128, 128))
+            generated_img = F.interpolate(generated_img, size=(128, 128)).to(device)
             l_dis = self.dis.calc_gen_loss(generated_img)
 
-            pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)))
+            pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
             l_rec = crit(log_softmax(pred_xt.reshape(-1, vocab_size)), tr_label.reshape(-1))
             if cer_func:
                 cer_func[0].add(pred_xt, tr_label)
@@ -51,13 +51,13 @@ class ConTranModel(nn.Module):
         elif mode == 'dis_update':
             sample_img = tr_img
             sample_img.requires_grad_()
-            sample_img = F.interpolate(sample_img, size=(128, 128))
+            sample_img = F.interpolate(sample_img, size=(128, 128)).to(device)
             l_real = self.dis.calc_dis_real_loss(sample_img)
             l_real.backward(retain_graph=True)
 
             with torch.no_grad():
                 generated_img = self.gen(tr_img)
-                generated_img = F.interpolate(generated_img, size=(128, 128))
+                generated_img = F.interpolate(generated_img, size=(128, 128)).to(device)
 
             l_fake = self.dis.calc_dis_fake_loss(generated_img)
             l_fake.backward(retain_graph=True)
@@ -65,7 +65,7 @@ class ConTranModel(nn.Module):
             l_total = l_real + l_fake
             if self.iter_num % self.show_iter_num == 0:
                 with torch.no_grad():
-                    pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)))
+                    pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
                 write_image(generated_img, pred_xt, tr_img, tr_label, 'epoch_' + str(epoch) + '-' + str(self.iter_num))
             return l_total
 
@@ -73,10 +73,10 @@ class ConTranModel(nn.Module):
             self.iter_num += 1
             tr_img.requires_grad_()  # Asegurando que tr_img tenga requires_grad=True
             generated_img = self.gen(tr_img)
-            generated_img = F.interpolate(generated_img, size=(128, 128))
+            generated_img = F.interpolate(generated_img, size=(128, 128)).to(device)
             print(f"generated_img.requires_grad: {generated_img.requires_grad}")
             
-            pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)))
+            pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
             print(f"pred_xt.requires_grad: {pred_xt.requires_grad}")
 
             log_softmax_pred_xt = log_softmax(pred_xt.reshape(-1, vocab_size))
@@ -94,8 +94,8 @@ class ConTranModel(nn.Module):
         elif mode == 'eval':
             with torch.no_grad():
                 generated_img = self.gen(tr_img)
-                generated_img = F.interpolate(generated_img, size=(128, 128))
-                pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)))
+                generated_img = F.interpolate(generated_img, size=(128, 128)).to(device)
+                pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
                 write_image(generated_img, pred_xt, tr_img, tr_label, 'eval_' + str(epoch) + '-' + str(self.iter_num))
                 self.iter_num += 1
                 l_dis = self.dis.calc_gen_loss(generated_img)

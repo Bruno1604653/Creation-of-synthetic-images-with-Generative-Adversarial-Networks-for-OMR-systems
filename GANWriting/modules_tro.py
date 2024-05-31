@@ -26,9 +26,8 @@ def normalize(tar):
     tar = tar.astype(np.uint8)
     return tar
 
-
 def fine(label_list):
-    if type(label_list) != type([]):
+    if type(label_list) != list:
         return [label_list]
     else:
         return label_list
@@ -110,7 +109,7 @@ class DisModel(nn.Module):
 
         self.cnn_f = nn.Sequential(*cnn_f)
 
-        example_input = torch.randn(1, 1, 128, 128)
+        example_input = torch.randn(1, 1, 128, 128).to(device)
         example_feat = self.cnn_f(example_input)
         flattened_size = np.prod(example_feat.shape[1:])
 
@@ -125,13 +124,12 @@ class DisModel(nn.Module):
         self.bce = nn.BCEWithLogitsLoss()
 
     def forward(self, x):
-        #(f"x.shape in forward DisModel: {x.shape}")
-        feat = self.cnn_f(x)
+        #print(f"x.shape in forward DisModel: {x.shape}")
+        feat = self.cnn_f(x.to(device))
         #print(f"feat.shape after cnn_f: {feat.shape}")
         out = self.cnn_c(feat)
         #print(f"out.shape after cnn_c: {out.shape}")
         return out
-
 
     def calc_dis_fake_loss(self, input_fake):
         #print(f"input_fake.shape: {input_fake.shape}")
@@ -153,8 +151,6 @@ class DisModel(nn.Module):
         fake_loss = self.bce(resp_fake, label)
         return fake_loss
 
-
-
 class GenModel_FC(nn.Module):
     def __init__(self):
         super(GenModel_FC, self).__init__()
@@ -166,8 +162,8 @@ class GenModel_FC(nn.Module):
         return images
 
     def forward(self, img):
-        feat_xs = self.enc_image(img)  # Codifica la imagen de entrada
-        #(f"Encoded features shape: {feat_xs.shape}")
+        feat_xs = self.enc_image(img.to(device))  # Codifica la imagen de entrada
+        #print(f"Encoded features shape: {feat_xs.shape}")
         generated_img = self.decode(feat_xs)  # Decodifica para generar la imagen
         #print(f"Generated image shape: {generated_img.shape}")
         return generated_img
@@ -175,11 +171,11 @@ class GenModel_FC(nn.Module):
 class ImageEncoder(nn.Module):
     def __init__(self):
         super(ImageEncoder, self).__init__()
-        self.model = vgg19_bn(False)
+        self.model = vgg19_bn(False).to(device)
         self.output_dim = 512
 
     def forward(self, x):
-        return self.model(x)
+        return self.model(x.to(device))
 
 class Decoder(nn.Module):
     def __init__(self, ups=4, n_res=2, dim=512, out_dim=1, res_norm='adain', activ='relu', pad_type='reflect'):
@@ -201,8 +197,7 @@ class Decoder(nn.Module):
         self.model = nn.Sequential(*self.model)
 
     def forward(self, x):
-        return self.model(x)
-
+        return self.model(x.to(device))
 
 class RecModel(nn.Module):
     def __init__(self, pretrain=False):
@@ -218,12 +213,9 @@ class RecModel(nn.Module):
 
     def forward(self, img, label, img_width):
         self.seq2seq.train()
-        img = torch.cat([img, img, img], dim=1)  # b,1,64,128->b,3,64,128
-        output, attn_weights = self.seq2seq(img, label, img_width, teacher_rate=False, train=False)
+        img = torch.cat([img, img, img], dim=1).to(device)  # b,1,64,128->b,3,64,128
+        output, attn_weights = self.seq2seq(img, label.to(device), img_width.to(device), teacher_rate=False, train=False)
         return output.permute(1, 0, 2)  # t,b,83->b,t,83
-
-
-
 
 class MLP(nn.Module):
     def __init__(self, in_dim=64, out_dim=4096, dim=256, n_blk=3, norm='none', activ='relu'):
@@ -237,15 +229,16 @@ class MLP(nn.Module):
         self.model = nn.Sequential(*self.model)
 
     def forward(self, x):
-        return self.model(x.view(x.size(0), -1))
+        return self.model(x.view(x.size(0), -1).to(device))
+
 if __name__ == "__main__":
     # Prueba del generador
-    gen_model = GenModel_FC()
-    sample_img = torch.randn(128, 1, 128, 128)  # Ejemplo de entrada
+    gen_model = GenModel_FC().to(device)
+    sample_img = torch.randn(128, 1, 128, 128).to(device)  # Ejemplo de entrada
     generated_img = gen_model(sample_img)
     #print(f"Generated image shape: {generated_img.shape}")
 
     # Prueba del discriminador
-    dis_model = DisModel()
+    dis_model = DisModel().to(device)
     output = dis_model(generated_img)
     #print(f"Output shape: {output.shape}")
