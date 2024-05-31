@@ -59,9 +59,10 @@ class MusicSymbolDataset(Dataset):
                             png_count += 1
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol_lower]))
                             print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
-                    print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
+                    #print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
                 else:
-                    print(f"Directorio no encontrado para símbolo: {symbol_dir}")
+                    pass
+                    #print(f"Directorio no encontrado para símbolo: {symbol_dir}")
         print(f"Total de imágenes encontradas: {len(self.data)}")
         print(f"Clases encontradas: {self.classes}")
 
