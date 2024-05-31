@@ -22,7 +22,7 @@ class Decoder(nn.Module):
 
     def forward(self, in_char, hidden, encoder_output, src_len, prev_attn):
         width = encoder_output.shape[0]
-        enc_len = src_len.cpu().numpy() * (width / src_len.numpy()[0])
+        enc_len = src_len.cpu().numpy() * (width / src_len.cpu().numpy()[0])
         enc_len = enc_len + 0.999
         enc_len = enc_len.astype('int')
         attn_weights = self.attention(hidden, encoder_output, enc_len, prev_attn)
@@ -43,4 +43,3 @@ class Decoder(nn.Module):
         output = output.squeeze(0)
         output = self.out(output)
         return output, latest_hidden, attn_weights.squeeze(2)
-
