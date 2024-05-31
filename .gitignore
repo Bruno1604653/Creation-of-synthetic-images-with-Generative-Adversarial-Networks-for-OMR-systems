@@ -7,9 +7,6 @@ dataset1
 dataset2
 datasets
 __pycache__
-<<<<<<< HEAD
-GANWriting/__pycache__
-=======
 GANWriting/__pycache__imgs/
 save_weights/
->>>>>>> 8228db438953c21a59973b55d90d24f8da7b43d1
+imgs
