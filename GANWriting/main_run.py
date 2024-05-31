@@ -52,6 +52,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch):
     cer_te2 = CER()
     print(len(train_loader))
     for i, train_data_list in enumerate(train_loader):
+        train_data_list = [data.to(device) for data in train_data_list]  # Mover los datos al dispositivo
         print(i)
         '''rec update'''
         rec_opt.zero_grad()
@@ -98,7 +99,7 @@ def test(test_loader, epoch, modelFile_o_model):
     if type(modelFile_o_model) == str:
         model = ConTranModel(show_iter_num, OOV).to(device)
         print('Loading ' + modelFile_o_model)
-        model.load_state_dict(torch.load(modelFile_o_model))
+        model.load_state_dict(torch.load(modelFile_o_model, map_location=device))
     else:
         model = modelFile_o_model
     model.eval()
@@ -109,6 +110,7 @@ def test(test_loader, epoch, modelFile_o_model):
     cer_te2 = CER()
     with torch.no_grad():
         for test_data_list in test_loader:
+            test_data_list = [data.to(device) for data in test_data_list]  # Mover los datos al dispositivo
             l_dis, l_rec = model(test_data_list, epoch, 'eval', cer_te)
             loss_dis.append(l_dis.cpu().item())
             loss_rec.append(l_rec.cpu().item())
@@ -125,7 +127,7 @@ def main(train_loader, test_loader):
     if CurriculumModelID > 0:
         model_file = 'save_weights/contran-' + str(CurriculumModelID) + '.model'
         print('Loading ' + model_file)
-        model.load_state_dict(torch.load(model_file))
+        model.load_state_dict(torch.load(model_file, map_location=device))
 
     dis_params = list(model.dis.parameters())
     gen_params = list(model.gen.parameters())
