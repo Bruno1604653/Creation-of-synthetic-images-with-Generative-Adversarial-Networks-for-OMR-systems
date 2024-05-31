@@ -127,7 +127,7 @@ def main(train_loader, test_loader):
     if CurriculumModelID > 0:
         model_file = 'save_weights/contran-' + str(CurriculumModelID) + '.model'
         print('Loading ' + model_file)
-        model.load_state_dict(torch.load(model_file, map_location=device))
+        model.load_state_dict(torch.load(model_file))
 
     dis_params = list(model.dis.parameters())
     gen_params = list(model.gen.parameters())
