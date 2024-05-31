@@ -39,17 +39,23 @@ class MusicSymbolDataset(Dataset):
         self.data = []
         for data_dir in data_dirs:
             print(f"Procesando directorio: {data_dir}")
+            if not os.path.exists(data_dir):
+                print(f"Directorio no existe: {data_dir}")
+                continue
             for symbol in MUSICAL_SYMBOLS:
                 symbol_dir = os.path.join(data_dir, symbol)
                 if os.path.exists(symbol_dir):
                     print(f"Existente: {symbol_dir}")
                     png_count = 0
                     for img_file in os.listdir(symbol_dir):
+                        print(f"Encontrado archivo: {img_file}")
                         if img_file.lower().endswith('.png'):
                             png_count += 1
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol]))
-                            #print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
+                            print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
                     print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
+                else:
+                    print(f"Directorio no encontrado para símbolo: {symbol_dir}")
         print(f"Total de imágenes encontradas: {len(self.data)}")
 
     def __len__(self):
@@ -63,7 +69,7 @@ class MusicSymbolDataset(Dataset):
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
-        directories = ['./dataset1/dataset1', './dataset2/dataset2', ]#'./data/open_omr_raw','./data/images', './data/open_pp_raw']
+        directories = ['./dataset1/dataset1', './dataset2/dataset2']
     
     train_dataset = MusicSymbolDataset(directories)
     test_dataset = MusicSymbolDataset(directories)
