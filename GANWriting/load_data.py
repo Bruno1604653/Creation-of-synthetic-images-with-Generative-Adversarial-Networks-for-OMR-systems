@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
-MUSICAL_SYMBOLS = ['other', 'quarter-note', 'quarter-rest', 'repeat-measure', 'segno', 'sharp', 'sixteenth-note', 'sixteenth-rest', 'sixty-four-note', 'sixty-four-rest', 'staccatissimo', 'stopped', 'tenuto', 'thirty-two-note', 'thirty-two-rest', 'tie-slur', 'trill', 'trill-wobble', 'tuplet', 'turn', 'volta', 'whole-half-rest', 'whole-note', 'test', 'training', 'validation', 'accent', 'barline', 'beam', 'c-clef', 'common-time', 'cut-time', 'dot', 'eighth-grace-note', 'eighth-note', 'eighth-rest', 'f-clef', 'flat', 'g-clef', 'half-note', 'multiple-eighth-notes', 'multiple-half-notes', 'multiple-quarter-notes', 'multiple-sixteenth-notes', 'natural', '1-8-time', '12-8-time', '2-4-time', '2-8-time', '3-4-time', '3-8-time', '4-2-time', '4-4-time', '4-8-time', '5-4-time', '5-8-time', '6-4-time', '6-8-time', '7-4-time', '8-8-time', '9-8-time', 'breve', 'chord', 'double-whole-rest', 'fermata', 'glissando', 'marcato', 'mordent', 'bass', 'crotchet', 'demisemiquaver_line', 'minim', 'quaver_br', 'quaver_line', 'quaver_tr', 'semibreve', 'semiquaver_br', 'semiquaver_line', 'semiquaver_tr', 'treble']
+MUSICAL_SYMBOLS = ['1-8-time', '12-8-time', '2-4-time', '2-8-time', '3-4-time', '3-8-time', '4-2-time', '4-4-time', '4-8-time', '5-4-time', '5-8-time', '6-4-time', '6-8-time', '7-4-time', '8-8-time', '9-8-time', 'accent', 'barline', 'bass', 'beam', 'breve', 'c-clef', 'chord', 'common-time','crotchet', 'cut-time', 'demisemiquaver_line', 'dot', 'double-whole-rest', 'eighth-grace-note', 'eighth-note', 'eighth-rest', 'f-clef', 'fermata','flat', 'g-clef', 'glissando', 'half-note', 'marcato', 'minim', 'mordent', 'multiple-eighth-notes', 'multiple-half-notes', 'multiple-quarter-notes', 'multiple-sixteenth-notes', 'natural', 'other', 'quarter-note', 'quarter-rest', 'quaver_br', 'quaver_line', 'quaver_tr', 'repeat-measure', 'segno', 'semibreve', 'semiquaver_br', 'semiquaver_line', 'semiquaver_tr', 'sharp', 'sixteenth-note', 'sixteenth-rest', 'sixty-four-note', 'sixty-four-rest', 'staccatissimo', 'stopped', 'tenuto', 'test', 'thirty-two-note', 'thirty-two-rest', 'tie-slur', 'training', 'treble', 'trill', 'trill-wobble', 'tuplet', 'turn', 'v2.0', 'validation', 'volta', 'whole-half-rest', 'whole-note']
 
 MUSICAL_SYMBOLS_DICT = {symbol: idx for idx, symbol in enumerate(MUSICAL_SYMBOLS)}
 
@@ -45,7 +45,7 @@ class MusicSymbolDataset(Dataset):
                     for img_file in os.listdir(symbol_dir):
                         if img_file.lower().endswith('.png'):
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol_lower]))
-                            print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
+                            #print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
 
         print(f"Total de imágenes encontradas: {len(self.data)}")
 
@@ -61,7 +61,7 @@ class MusicSymbolDataset(Dataset):
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
-        directories = directories = ['./dataset1/dataset1', './dataset2/dataset2', './data/open_omr_raw', './data/images', './data/muscima_pp_raw']
+        directories = directories = ['./dataset1', './dataset2', './data/open_omr_raw', './data/images', './data/muscima_pp_raw']
 
     train_dataset = MusicSymbolDataset(directories)
     test_dataset = MusicSymbolDataset(directories)
