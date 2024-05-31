@@ -67,8 +67,8 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0):
 
     if len(test_dataset) == 0:
         raise ValueError("El dataset de prueba está vacío")
-    # print(f"\nlen(train_dataset): {len(train_dataset)}")
-    # print(f"\nlen(test_dataset): {len(test_dataset)}")
+    print(f"\nlen(train_dataset): {len(train_dataset)}")
+    print(f"\nlen(test_dataset): {len(test_dataset)}")
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
