@@ -137,12 +137,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
     res_cer_te = cer_te.fin()
     res_cer_te2 = cer_te2.fin()
 
-    log_message = 'epo%d <tr>-<gen>: l_dis=%.2f-%.2f, l_rec=%.2f-%.2f, cer=%.2f-%.2f-%.2f, ssim=%.4f, time=%.1f' % (
-        epoch, fl_dis_tr, fl_dis, fl_rec_tr, fl_rec, res_cer_tr, res_cer_te, res_cer_te2, avg_ssim, time.time() - time_s)
-    with open(log_file, "a") as f:
-        f.write(log_message + '\n')
-    print(log_message)
-
+    print('epo%d <tr>-<gen>: l_dis=%.2f-%.2f, l_rec=%.2f-%.2f, cer=%.2f-%.2f-%.2f, ssim=%.4f, time=%.1f' % (epoch, fl_dis_tr, fl_dis, fl_rec_tr, fl_rec, res_cer_tr, res_cer_te, res_cer_te2, avg_ssim, time.time() - time_s))
     return res_cer_te + res_cer_te2, avg_ssim
 
 def test(test_loader, epoch, modelFile_o_model):
