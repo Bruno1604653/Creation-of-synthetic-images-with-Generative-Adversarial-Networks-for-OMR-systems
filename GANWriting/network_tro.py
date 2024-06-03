@@ -42,6 +42,7 @@ class ConTranModel(nn.Module):
             l_rec = crit(log_softmax(pred_xt.reshape(-1, vocab_size)), tr_label.reshape(-1))
             if cer_func:
                 cer_func[0].add(pred_xt, tr_label)
+                cer_func[1].add(pred_xt, tr_label)
 
             l_total = w_dis * l_dis + w_rec * l_rec
             l_total.backward(retain_graph=True)
