@@ -1,0 +1,107 @@
+epo0 <tr>-<gen>: l_dis=0.99-1.33, l_rec=38.16-38.08, cer=71.07-71.12-71.12, ssim=0.2968, time=1303.6
+epo0 <tr>: cer=142.25, ssim=0.2968
+epo0 <te>: cer=64.46, ssim=0.3099
+epo1 <tr>-<gen>: l_dis=0.77-2.15, l_rec=18.00-17.91, cer=33.47-33.10-33.10, ssim=0.3324, time=1307.7
+epo1 <tr>: cer=66.20, ssim=0.3324
+epo2 <tr>-<gen>: l_dis=0.70-2.12, l_rec=11.53-11.45, cer=21.16-20.99-20.99, ssim=0.3357, time=1308.1
+epo2 <tr>: cer=41.99, ssim=0.3357
+epo3 <tr>-<gen>: l_dis=0.94-1.29, l_rec=7.53-7.48, cer=12.65-12.47-12.47, ssim=0.3495, time=1309.4
+epo3 <tr>: cer=24.94, ssim=0.3495
+epo4 <tr>-<gen>: l_dis=0.89-1.36, l_rec=5.63-5.59, cer=9.63-9.36-9.36, ssim=0.3481, time=1306.8
+epo4 <tr>: cer=18.72, ssim=0.3481
+epo5 <tr>-<gen>: l_dis=0.79-1.50, l_rec=4.25-4.19, cer=6.79-6.61-6.61, ssim=0.3601, time=1307.7
+epo5 <tr>: cer=13.23, ssim=0.3601
+epo6 <tr>-<gen>: l_dis=0.71-1.65, l_rec=3.53-3.47, cer=5.57-5.45-5.45, ssim=0.3549, time=1301.8
+epo6 <tr>: cer=10.89, ssim=0.3549
+epo7 <tr>-<gen>: l_dis=0.83-1.47, l_rec=3.00-2.94, cer=5.01-4.80-4.80, ssim=0.3425, time=1305.2
+epo7 <tr>: cer=9.61, ssim=0.3425
+epo8 <tr>-<gen>: l_dis=0.83-1.47, l_rec=2.34-2.30, cer=3.95-3.76-3.76, ssim=0.3381, time=1308.1
+epo8 <tr>: cer=7.52, ssim=0.3381
+epo9 <tr>-<gen>: l_dis=0.72-1.64, l_rec=2.29-2.23, cer=3.95-3.75-3.75, ssim=0.3412, time=1307.5
+epo9 <tr>: cer=7.50, ssim=0.3412
+epo10 <tr>-<gen>: l_dis=0.66-1.84, l_rec=2.06-2.00, cer=3.52-3.29-3.29, ssim=0.3405, time=1305.8
+epo10 <tr>: cer=6.58, ssim=0.3405
+epo10 <te>: cer=25.38, ssim=0.3516
+epo11 <tr>-<gen>: l_dis=0.60-2.03, l_rec=1.71-1.67, cer=2.49-2.29-2.29, ssim=0.3418, time=1303.9
+epo11 <tr>: cer=4.59, ssim=0.3418
+epo12 <tr>-<gen>: l_dis=0.97-1.45, l_rec=1.56-1.53, cer=2.04-1.92-1.92, ssim=0.3363, time=1305.4
+epo12 <tr>: cer=3.83, ssim=0.3363
+epo13 <tr>-<gen>: l_dis=0.74-1.70, l_rec=1.45-1.41, cer=1.83-1.69-1.69, ssim=0.3475, time=1303.5
+epo13 <tr>: cer=3.38, ssim=0.3475
+epo14 <tr>-<gen>: l_dis=0.37-3.06, l_rec=1.32-1.28, cer=1.62-1.46-1.46, ssim=0.3468, time=1307.1
+epo14 <tr>: cer=2.92, ssim=0.3468
+epo15 <tr>-<gen>: l_dis=0.16-4.42, l_rec=1.38-1.33, cer=1.56-1.37-1.37, ssim=0.3426, time=1308.2
+epo15 <tr>: cer=2.75, ssim=0.3426
+epo16 <tr>-<gen>: l_dis=0.51-2.97, l_rec=1.17-1.13, cer=1.32-1.17-1.17, ssim=0.3227, time=1304.1
+epo16 <tr>: cer=2.35, ssim=0.3227
+epo17 <tr>-<gen>: l_dis=0.12-5.17, l_rec=1.10-1.06, cer=1.09-1.06-1.06, ssim=0.3010, time=1307.2
+epo17 <tr>: cer=2.11, ssim=0.3010
+epo18 <tr>-<gen>: l_dis=0.12-5.54, l_rec=1.09-1.05, cer=1.18-1.05-1.05, ssim=0.3092, time=1306.1
+epo18 <tr>: cer=2.10, ssim=0.3092
+epo19 <tr>-<gen>: l_dis=0.24-4.63, l_rec=1.06-1.02, cer=1.17-1.07-1.07, ssim=0.2764, time=1306.7
+epo19 <tr>: cer=2.14, ssim=0.2764
+epo20 <tr>-<gen>: l_dis=0.08-5.96, l_rec=1.01-0.97, cer=1.09-1.03-1.03, ssim=0.3066, time=1306.6
+epo20 <tr>: cer=2.07, ssim=0.3066
+epo20 <te>: cer=11.39, ssim=0.2237
+epo21 <tr>-<gen>: l_dis=0.07-6.09, l_rec=0.92-0.88, cer=0.86-0.72-0.72, ssim=0.2510, time=1306.0
+epo21 <tr>: cer=1.43, ssim=0.2510
+epo22 <tr>-<gen>: l_dis=0.31-6.22, l_rec=0.85-0.82, cer=0.79-0.72-0.72, ssim=0.2770, time=1303.8
+epo22 <tr>: cer=1.45, ssim=0.2770
+epo23 <tr>-<gen>: l_dis=0.87-1.62, l_rec=0.61-0.59, cer=0.52-0.45-0.45, ssim=0.3052, time=1308.8
+epo23 <tr>: cer=0.90, ssim=0.3052
+epo24 <tr>-<gen>: l_dis=0.26-4.17, l_rec=0.77-0.74, cer=0.81-0.74-0.74, ssim=0.2811, time=1305.9
+epo24 <tr>: cer=1.48, ssim=0.2811
+epo25 <tr>-<gen>: l_dis=0.04-5.41, l_rec=0.61-0.59, cer=0.47-0.40-0.40, ssim=0.2754, time=1304.1
+epo25 <tr>: cer=0.80, ssim=0.2754
+epo26 <tr>-<gen>: l_dis=0.05-5.88, l_rec=0.76-0.72, cer=0.78-0.67-0.67, ssim=0.2632, time=1261.7
+epo26 <tr>: cer=1.35, ssim=0.2632
+epo27 <tr>-<gen>: l_dis=0.02-6.76, l_rec=0.62-0.59, cer=0.53-0.48-0.48, ssim=0.2814, time=1260.7
+epo27 <tr>: cer=0.96, ssim=0.2814
+epo28 <tr>-<gen>: l_dis=0.02-7.35, l_rec=0.66-0.62, cer=0.57-0.50-0.50, ssim=0.2434, time=1256.4
+epo28 <tr>: cer=1.00, ssim=0.2434
+epo29 <tr>-<gen>: l_dis=0.43-4.42, l_rec=0.72-0.68, cer=0.68-0.63-0.63, ssim=0.2570, time=1260.0
+epo29 <tr>: cer=1.26, ssim=0.2570
+epo30 <tr>-<gen>: l_dis=0.23-3.99, l_rec=0.50-0.48, cer=0.39-0.33-0.33, ssim=0.2919, time=1261.8
+epo30 <tr>: cer=0.66, ssim=0.2919
+epo30 <te>: cer=4.75, ssim=0.2984
+epo31 <tr>-<gen>: l_dis=0.02-6.72, l_rec=0.58-0.55, cer=0.46-0.36-0.36, ssim=0.2295, time=1260.7
+epo31 <tr>: cer=0.72, ssim=0.2295
+epo32 <tr>-<gen>: l_dis=0.03-6.69, l_rec=0.58-0.55, cer=0.53-0.41-0.41, ssim=0.2111, time=1255.4
+epo32 <tr>: cer=0.82, ssim=0.2111
+epo33 <tr>-<gen>: l_dis=0.27-5.59, l_rec=0.63-0.59, cer=0.58-0.50-0.50, ssim=0.2476, time=1261.5
+epo33 <tr>: cer=0.99, ssim=0.2476
+epo34 <tr>-<gen>: l_dis=0.03-6.61, l_rec=0.53-0.50, cer=0.37-0.32-0.32, ssim=0.2830, time=1259.2
+epo34 <tr>: cer=0.63, ssim=0.2830
+epo35 <tr>-<gen>: l_dis=0.02-6.45, l_rec=0.47-0.45, cer=0.40-0.36-0.36, ssim=0.1799, time=1261.9
+epo35 <tr>: cer=0.71, ssim=0.1799
+epo36 <tr>-<gen>: l_dis=0.06-6.67, l_rec=0.44-0.42, cer=0.34-0.27-0.27, ssim=0.1840, time=1258.4
+epo36 <tr>: cer=0.54, ssim=0.1840
+epo37 <tr>-<gen>: l_dis=0.02-7.36, l_rec=0.50-0.47, cer=0.35-0.28-0.28, ssim=0.2903, time=1255.8
+epo37 <tr>: cer=0.56, ssim=0.2903
+epo38 <tr>-<gen>: l_dis=0.02-6.35, l_rec=0.41-0.39, cer=0.30-0.26-0.26, ssim=0.1526, time=1256.0
+epo38 <tr>: cer=0.53, ssim=0.1526
+epo39 <tr>-<gen>: l_dis=0.02-6.43, l_rec=0.38-0.36, cer=0.29-0.26-0.26, ssim=0.1747, time=1259.3
+epo39 <tr>: cer=0.52, ssim=0.1747
+epo40 <tr>-<gen>: l_dis=0.16-6.12, l_rec=0.39-0.36, cer=0.28-0.25-0.25, ssim=0.2270, time=1255.4
+epo40 <tr>: cer=0.49, ssim=0.2270
+epo40 <te>: cer=4.68, ssim=0.2003
+epo41 <tr>-<gen>: l_dis=0.01-7.38, l_rec=0.45-0.42, cer=0.31-0.28-0.28, ssim=0.1986, time=1260.0
+epo41 <tr>: cer=0.56, ssim=0.1986
+epo42 <tr>-<gen>: l_dis=0.11-6.97, l_rec=0.38-0.36, cer=0.21-0.20-0.20, ssim=0.2318, time=1262.1
+epo42 <tr>: cer=0.40, ssim=0.2318
+epo43 <tr>-<gen>: l_dis=0.29-5.22, l_rec=0.45-0.42, cer=0.28-0.23-0.23, ssim=0.2029, time=1258.6
+epo43 <tr>: cer=0.45, ssim=0.2029
+epo44 <tr>-<gen>: l_dis=0.08-5.71, l_rec=0.37-0.34, cer=0.21-0.16-0.16, ssim=0.2121, time=1263.5
+epo44 <tr>: cer=0.33, ssim=0.2121
+epo45 <tr>-<gen>: l_dis=0.02-6.38, l_rec=0.26-0.25, cer=0.11-0.10-0.10, ssim=0.1774, time=1262.8
+epo45 <tr>: cer=0.19, ssim=0.1774
+epo46 <tr>-<gen>: l_dis=0.01-7.16, l_rec=0.33-0.31, cer=0.19-0.16-0.16, ssim=0.2111, time=1258.5
+epo46 <tr>: cer=0.33, ssim=0.2111
+epo47 <tr>-<gen>: l_dis=0.01-7.66, l_rec=0.34-0.32, cer=0.20-0.16-0.16, ssim=0.2277, time=1266.3
+epo47 <tr>: cer=0.33, ssim=0.2277
+epo48 <tr>-<gen>: l_dis=0.01-7.11, l_rec=0.36-0.33, cer=0.22-0.18-0.18, ssim=0.1998, time=1261.2
+epo48 <tr>: cer=0.35, ssim=0.1998
+epo49 <tr>-<gen>: l_dis=0.01-7.72, l_rec=0.27-0.25, cer=0.17-0.14-0.14, ssim=0.1908, time=1258.6
+epo49 <tr>: cer=0.28, ssim=0.1908
+epo50 <tr>-<gen>: l_dis=0.01-7.74, l_rec=0.29-0.27, cer=0.14-0.13-0.13, ssim=0.1801, time=1263.8
+epo50 <tr>: cer=0.27, ssim=0.1801
