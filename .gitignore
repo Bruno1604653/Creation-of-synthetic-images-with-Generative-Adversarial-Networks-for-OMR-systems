@@ -10,3 +10,4 @@ __pycache__
 GANWriting/__pycache__imgs/
 save_weights/
 imgs
+all_imgs

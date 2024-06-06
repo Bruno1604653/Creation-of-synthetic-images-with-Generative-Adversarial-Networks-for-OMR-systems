@@ -24,7 +24,9 @@ class ConTranModel(nn.Module):
 
     def forward(self, train_data_list, epoch, mode, cer_func=None):
         tr_img, tr_label = train_data_list
+        print(f"tr_img: {tr_img}")
         tr_img = tr_img.to(device)
+        print(f"tr_label: {tr_label}")
         tr_label = tr_label.to(device)
 
         if tr_label.dim() == 1:
@@ -50,7 +52,9 @@ class ConTranModel(nn.Module):
 
         elif mode == 'dis_update':
             sample_img = tr_img
+            print(f"dis_update, sample_img.shape: {sample_img.shape}")
             sample_img = F.interpolate(sample_img, size=(128, 128))
+            print(f"dis_update, sample_img.shape after interpolate: {sample_img.shape}")
             l_real = self.dis.calc_dis_real_loss(sample_img)
             l_real.backward(retain_graph=True)
 
@@ -72,16 +76,16 @@ class ConTranModel(nn.Module):
             self.iter_num += 1
             generated_img = self.gen(tr_img)
             generated_img = F.interpolate(generated_img, size=(128, 128))
-            #print(f"generated_img.requires_grad: {generated_img.requires_grad}")
+            print(f"generated_img.requires_grad: {generated_img.requires_grad}")
 
             pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
-            #print(f"pred_xt.requires_grad: {pred_xt.requires_grad}")
+            print(f"pred_xt.requires_grad: {pred_xt.requires_grad}")
 
             log_softmax_pred_xt = log_softmax(pred_xt.reshape(-1, vocab_size))
-            #print(f"log_softmax_pred_xt.requires_grad: {log_softmax_pred_xt.requires_grad}")
+            print(f"log_softmax_pred_xt.requires_grad: {log_softmax_pred_xt.requires_grad}")
 
             l_rec = crit(log_softmax_pred_xt, tr_label.reshape(-1))
-            #print(f"l_rec.requires_grad: {l_rec.requires_grad}")
+            print(f"l_rec.requires_grad: {l_rec.requires_grad}")
 
             if cer_func:
                 cer_func.add(pred_xt, tr_label)
@@ -101,3 +105,4 @@ class ConTranModel(nn.Module):
                 if cer_func:
                     cer_func.add(pred_xt, tr_label)
             return l_dis, l_rec
+

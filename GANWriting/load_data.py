@@ -28,7 +28,6 @@ MUSICAL_SYMBOLS_DICT = {symbol: idx for idx, symbol in enumerate(MUSICAL_SYMBOLS
 
 IMG_HEIGHT = 128
 IMG_WIDTH = 128
-IMG_SIZE = 128
 
 tokens = {
     'PAD_TOKEN': 0,
@@ -83,6 +82,8 @@ class MusicSymbolDataset(Dataset):
                 else:
                     pass
                     #print(f"Directorio no encontrado para símbolo: {symbol_dir}")
+        print(f"Ejemplo data: {self.data[0]}")
+        print(f"tokens: {tokens}")
         print(f"Total de imágenes encontradas: {len(self.data)}")
         print(f"Clases encontradas: {self.classes}")
 
@@ -98,7 +99,7 @@ class MusicSymbolDataset(Dataset):
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0):
     if directories is None:
-        directories = directories = ['./dataset1/dataset1','./dataset2/dataset2'] #'./data/open_omr_raw', './data/images', './data/muscima_pp_raw']
+        directories = directories = ['./dataset1','./dataset2'] #'./data/open_omr_raw', './data/images', './data/muscima_pp_raw']
 
     train_dataset = MusicSymbolDataset(directories)
     test_dataset = MusicSymbolDataset(directories)

@@ -16,12 +16,12 @@ device = torch.device('cpu' if not torch.cuda.is_available() else 'cuda')
 def normalize(tar):
     min_val = tar.min()
     max_val = tar.max()
-    
+
     if max_val != min_val:
         tar = (tar - min_val) / (max_val - min_val)
     else:
         tar = np.zeros_like(tar)  # Asigna una matriz de ceros si min y max son iguales
-    
+
     tar = tar * 255
     tar = tar.astype(np.uint8)
     return tar

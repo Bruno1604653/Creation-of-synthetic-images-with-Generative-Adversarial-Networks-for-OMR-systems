@@ -6,6 +6,7 @@ from skimage.metrics import structural_similarity as ssim
 import torch.nn.functional as F
 from torch.cuda.amp import autocast, GradScaler
 import numpy as np
+import matplotlib.pyplot as plt
 import time
 import argparse
 from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEIGHT, num_tokens
@@ -26,19 +27,28 @@ NUM_THREAD = 4
 
 EARLY_STOP_EPOCH = None
 EVAL_EPOCH = 10
-MODEL_SAVE_EPOCH = 10
-show_iter_num = 500
+MODEL_SAVE_EPOCH = 200
+show_iter_num = 5000
 LABEL_SMOOTH = True
 Bi_GRU = True
 VISUALIZE_TRAIN = True
 
-BATCH_SIZE = 25  # Reducir tamaño del lote para pruebas
-lr_dis = 5e-5
-lr_gen = 5e-5
-lr_rec = 5e-6
-#torch.autograd.set_detect_anomaly(True)
+BATCH_SIZE = 2  # Reducir tamaño del lote para pruebas
+lr_dis = 1 * 1e-4
+lr_gen = 1 * 1e-4
+lr_rec = 1 * 1e-5
+torch.autograd.set_detect_anomaly(True)
 CurriculumModelID = args.start_epoch
-
+def debug_train_data(train_data_list):
+    tr_img, tr_label = train_data_list
+    print(f"tr_img: {tr_img.shape}, tr_label: {tr_label}")
+    for i in range(len(tr_img)):
+        img = tr_img[i].cpu().numpy().squeeze()
+        label = tr_label[i].cpu().item()
+        print(f"Label: {label}, Image min: {img.min()}, max: {img.max()}")
+        plt.imshow(img, cmap='gray')
+        plt.title(f"Label: {label}")
+        plt.show()
 def all_data_loader():
     train_loader, test_loader = load_data_func(OOV)
     train_loader = torch.utils.data.DataLoader(dataset=train_loader.dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
@@ -71,7 +81,9 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
     for i, train_data_list in enumerate(train_loader):
         print(i)
         train_data_list = [data.to(device) for data in train_data_list]  # Mover los datos al dispositivo
-
+        for train_data_list in train_loader:
+            debug_train_data(train_data_list)
+            break
         '''rec update'''
         rec_opt.zero_grad()
         l_rec_tr = model(train_data_list, epoch, 'rec_update', cer_tr)
@@ -101,7 +113,7 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
         for name, param in model.named_parameters():
             if param.grad is not None:
                 pass
-                #print(f'{name} gradient mean: {param.grad.mean()}, gradient max: {param.grad.max()}, gradient min: {param.grad.min()}')
+                print(f'{name} gradient mean: {param.grad.mean()}, gradient max: {param.grad.max()}, gradient min: {param.grad.min()}')
 
         # Asegúrate de que los datos no tengan valores anómalos
         for data in train_data_list:
@@ -189,6 +201,7 @@ def test(test_loader, epoch, modelFile_o_model):
 def main(train_loader, test_loader):
     print(f"Device: {device}")
     model = ConTranModel(show_iter_num, OOV).to(device)
+    print(model)
     if CurriculumModelID > 0:
         model_file = 'save_weights/contran-' + str(CurriculumModelID) + '.model'
         print('Loading ' + model_file)
