@@ -27,17 +27,17 @@ NUM_THREAD = 4
 
 EARLY_STOP_EPOCH = None
 EVAL_EPOCH = 10
-MODEL_SAVE_EPOCH = 200
-show_iter_num = 5000
+MODEL_SAVE_EPOCH = 10
+show_iter_num = 1000
 LABEL_SMOOTH = True
 Bi_GRU = True
 VISUALIZE_TRAIN = True
 
-BATCH_SIZE = 2  # Reducir tamaño del lote para pruebas
-lr_dis = 1 * 1e-4
-lr_gen = 1 * 1e-4
-lr_rec = 1 * 1e-5
-torch.autograd.set_detect_anomaly(True)
+BATCH_SIZE = 25  # Reducir tamaño del lote para pruebas
+lr_dis = 1e-5
+lr_gen = 1e-4
+lr_rec = 1e-5
+#torch.autograd.set_detect_anomaly(True)
 CurriculumModelID = args.start_epoch
 def debug_train_data(train_data_list):
     tr_img, tr_label = train_data_list
