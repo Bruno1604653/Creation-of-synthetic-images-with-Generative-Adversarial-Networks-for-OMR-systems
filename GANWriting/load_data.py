@@ -2,7 +2,7 @@ import os
 import numpy as np
 from PIL import Image
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, random_split
 from torchvision import transforms
 
 
@@ -97,20 +97,25 @@ class MusicSymbolDataset(Dataset):
         #print(f"Loaded image shape: {image.shape}")  # Add this line to print the shape of each loaded image
         return image, label
 
-def loadData(oov, directories=None, batch_size=128, num_workers=0):
+def loadData(oov, directories=None, batch_size=128, num_workers=0, test_split_ratio=0.2):
     if directories is None:
-        directories = directories = ['/data2fast/users/bfajardo/datasets/dataset1/dataset1','/data2fast/users/bfajardo/datasets/dataset2/dataset2'] #'./data/open_omr_raw', './data/images', './data/muscima_pp_raw']
+        directories = ['/data2fast/users/bfajardo/datasets/dataset1/dataset1', '/data2fast/users/bfajardo/datasets/dataset2/dataset2',
+'/data2fast/users/bfajardo/datasets/data/images','/data2fast/users/bfajardo/datasets/data/muscima_pp_raw','/data2fast/users/bfajardo/datasets/data/open_omr_raw']
 
-    train_dataset = MusicSymbolDataset(directories)
-    test_dataset = MusicSymbolDataset(directories)
+    dataset = MusicSymbolDataset(directories)
 
-    if len(train_dataset) == 0:
-        raise ValueError("El dataset de entrenamiento está vacío")
+    if len(dataset) == 0:
+        raise ValueError("El dataset está vacío")
 
-    if len(test_dataset) == 0:
-        raise ValueError("El dataset de prueba está vacío")
+    # Dividir el dataset en entrenamiento y prueba
+    test_size = int(test_split_ratio * len(dataset))
+    train_size = len(dataset) - test_size
+    train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
+
     print(f"\nlen(train_dataset): {len(train_dataset)}")
     print(f"\nlen(test_dataset): {len(test_dataset)}")
+
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
+

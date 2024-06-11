@@ -4,16 +4,19 @@ import glob
 from torch import optim
 from skimage.metrics import structural_similarity as ssim
 import torch.nn.functional as F
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import GradScaler
+import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.pyplot as plt
 import time
 import argparse
+from torchvision import transforms
 from load_data import loadData as load_data_func, vocab_size, IMG_WIDTH, IMG_HEIGHT, num_tokens
 from network_tro import ConTranModel
 from loss_tro import CER
+from collections import Counter
+
 os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
-#os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128'
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 parser = argparse.ArgumentParser(description='seq2seq net', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('start_epoch', type=int, help='load saved weights from which epoch')
@@ -26,18 +29,18 @@ OOV = True
 NUM_THREAD = 4
 
 EARLY_STOP_EPOCH = None
-EVAL_EPOCH = 10
-MODEL_SAVE_EPOCH = 10
+EVAL_EPOCH = 2
+MODEL_SAVE_EPOCH = 2
 show_iter_num = 1000
 LABEL_SMOOTH = True
 Bi_GRU = True
 VISUALIZE_TRAIN = True
 
-BATCH_SIZE = 25  # Reducir tamaño del lote para pruebas
+BATCH_SIZE = 2
 lr_dis = 1e-5
 lr_gen = 1e-4
 lr_rec = 1e-5
-#torch.autograd.set_detect_anomaly(True)
+
 CurriculumModelID = args.start_epoch
 def debug_train_data(train_data_list):
     tr_img, tr_label = train_data_list
@@ -53,7 +56,26 @@ def all_data_loader():
     train_loader, test_loader = load_data_func(OOV)
     train_loader = torch.utils.data.DataLoader(dataset=train_loader.dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
     test_loader = torch.utils.data.DataLoader(dataset=test_loader.dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
+    balance_data_loader(train_loader)
     return train_loader, test_loader
+
+def balance_data_loader(loader):
+    labels = []
+    for _, tr_label in loader:
+        labels.extend(tr_label.cpu().numpy())
+    counter = Counter(labels)
+    print(f"Label distribution: {counter}")
+
+def debug_train_data(train_data_list, stage="Original"):
+    tr_img, tr_label = train_data_list
+    print(f"{stage} - tr_img: {tr_img.shape}, tr_label: {tr_label}")
+    for i in range(len(tr_img)):
+        img = tr_img[i].cpu().numpy().squeeze()
+        label = tr_label[i].cpu().item()
+        print(f"{stage} - Label: {label}, Image min: {img.min()}, max: {img.max()}")
+        plt.imshow(img, cmap='gray')
+        plt.title(f"{stage} - Label: {label}")
+        plt.show()
 
 def compute_ssim(img1, img2):
     """Compute SSIM between two images."""
@@ -80,10 +102,14 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
 
     for i, train_data_list in enumerate(train_loader):
         print(i)
-        train_data_list = [data.to(device) for data in train_data_list]  # Mover los datos al dispositivo
-        for train_data_list in train_loader:
-            debug_train_data(train_data_list)
-            break
+        tr_img, tr_label = train_data_list
+        tr_img = tr_img.to(device)
+        tr_label = tr_label.to(device)
+
+        #debug_train_data((tr_img, tr_label), "Original")
+
+        train_data_list = (tr_img, tr_label)
+
         '''rec update'''
         rec_opt.zero_grad()
         l_rec_tr = model(train_data_list, epoch, 'rec_update', cer_tr)
@@ -113,13 +139,12 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
         for name, param in model.named_parameters():
             if param.grad is not None:
                 pass
-                print(f'{name} gradient mean: {param.grad.mean()}, gradient max: {param.grad.max()}, gradient min: {param.grad.min()}')
+                #print(f'{name} gradient mean: {param.grad.mean()}, gradient max: {param.grad.max()}, gradient min: {param.grad.min()}')
 
         # Asegúrate de que los datos no tengan valores anómalos
         for data in train_data_list:
             if torch.isnan(data).any() or torch.isinf(data).any():
-                pass
-                #print(f'Anomalous data detected in batch {i}')
+                print(f'Anomalous data detected in batch {i}')
 
         # Chequear valores de pérdida
         if torch.isnan(l_rec_tr).any() or torch.isinf(l_rec_tr).any():
@@ -127,14 +152,15 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
         if torch.isnan(l_dis_tr).any() or torch.isinf(l_dis_tr).any():
             print(f'ls_dis_tr: Anomalous loss detected in dis_update at batch {i}')
         if torch.isnan(l_total).any() or torch.isinf(l_total).any():
-            print(f'ls_total: Anomalous loss detected in dis_update at batch {i}')
+            print(f'ls_total: Anomalous loss detected in gen_update at batch {i}')
 
         # Calcular SSIM
         with torch.no_grad():
-            generated_imgs = model.gen(train_data_list[0])
-            reference_imgs = F.interpolate(train_data_list[0], size=(128, 128))
-            generated_imgs = F.interpolate(generated_imgs, size=(128, 128))
-            for gen_img, ref_img in zip(generated_imgs, reference_imgs):
+            # Generar las imágenes
+            generated_imgs = model.gen(tr_img)
+
+            # Calcular SSIM para cada par de imágenes
+            for gen_img, ref_img in zip(generated_imgs, tr_img):
                 ssim_score = compute_ssim(gen_img, ref_img)
                 ssim_scores.append(ssim_score)
 
@@ -175,18 +201,25 @@ def test(test_loader, epoch, modelFile_o_model):
     cer_te2 = CER()
     ssim_scores = []
     for test_data_list in test_loader:
-        test_data_list = [data.to(device) for data in test_data_list]  # Mover los datos al dispositivo
+        tr_img, tr_label = test_data_list
+        tr_img = tr_img.to(device)
+        tr_label = tr_label.to(device)
+
+        test_data_list = (tr_img, tr_label)
+
         l_dis, l_rec = model(test_data_list, epoch, 'eval', cer_te)
         loss_dis.append(l_dis.cpu().item())
         loss_rec.append(l_rec.cpu().item())
 
         # Calcular SSIM
-        generated_imgs = model.gen(test_data_list[0])
-        reference_imgs = F.interpolate(test_data_list[0], size=(128, 128))
-        generated_imgs = F.interpolate(generated_imgs, size=(128, 128))
-        for gen_img, ref_img in zip(generated_imgs, reference_imgs):
-            ssim_score = compute_ssim(gen_img, ref_img)
-            ssim_scores.append(ssim_score)
+        with torch.no_grad():
+            # Generar las imágenes
+            generated_imgs = model.gen(tr_img)
+
+            # Calcular SSIM para cada par de imágenes
+            for gen_img, ref_img in zip(generated_imgs, tr_img):
+                ssim_score = compute_ssim(gen_img, ref_img)
+                ssim_scores.append(ssim_score)
         del l_dis, l_rec
         torch.cuda.empty_cache()
 
@@ -271,3 +304,5 @@ if __name__ == '__main__':
     train_loader, test_loader = all_data_loader()
     main(train_loader, test_loader)
     print(time.ctime())
+
+
