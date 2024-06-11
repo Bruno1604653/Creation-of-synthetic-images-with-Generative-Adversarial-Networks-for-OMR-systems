@@ -21,7 +21,7 @@ def normalize(tar):
         tar = (tar - min_val) / (max_val - min_val)
     else:
         tar = np.zeros_like(tar)  # Asigna una matriz de ceros si min y max son iguales
-    
+
     tar = tar * 255
     tar = tar.astype(np.uint8)
     return tar
@@ -33,7 +33,7 @@ def fine(label_list):
         return label_list
 
 def write_image(xg, pred_label, gt_img, gt_label, title):
-    folder = '/data2fast/users/bfajardo/imgs_exp2'
+    folder = 'imgs_alldataset'
     if not os.path.exists(folder):
         os.makedirs(folder)
     batch_size = gt_label.shape[0]
@@ -69,6 +69,7 @@ def write_image(xg, pred_label, gt_img, gt_label, title):
         outs.append(out)
     final_out = np.hstack(outs)
     cv2.imwrite(folder + '/' + title + '.png', final_out)
+
 
 def assign_adain_params(adain_params, model):
     # assign the adain_params to the AdaIN layers in model
@@ -151,6 +152,7 @@ class DisModel(nn.Module):
         fake_loss = self.bce(resp_fake, label)
         return fake_loss
 
+
 class GenModel_FC(nn.Module):
     def __init__(self):
         super(GenModel_FC, self).__init__()
@@ -177,27 +179,29 @@ class ImageEncoder(nn.Module):
     def forward(self, x):
         return self.model(x.to(device))
 
+
 class Decoder(nn.Module):
-    def __init__(self, ups=4, n_res=2, dim=512, out_dim=1, res_norm='adain', activ='relu', pad_type='reflect'):
+    def __init__(self, ups=5, n_res=2, dim=512, out_dim=1, res_norm='adain', activ='relu', pad_type='reflect'):
         super(Decoder, self).__init__()
 
         self.model = []
         self.model += [ResBlocks(n_res, dim, "none", activ, pad_type=pad_type)]
         for i in range(ups):
-            self.model += [nn.Upsample(scale_factor=2),
-                           Conv2dBlock(dim, dim // 2, 5, 1, 2,
-                                       norm='in',
-                                       activation=activ,
-                                       pad_type=pad_type)]
+            self.model += [
+                nn.Upsample(scale_factor=2),  # Duplicar resolución en cada paso
+                Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='in', activation=activ, pad_type=pad_type)
+            ]
             dim //= 2
-        self.model += [Conv2dBlock(dim, out_dim, 7, 1, 3,
-                                   norm='none',
-                                   activation='tanh',
-                                   pad_type=pad_type)]
+        self.model += [
+            Conv2dBlock(dim, out_dim, 7, 1, 3, norm='none', activation='tanh', pad_type=pad_type)
+        ]
         self.model = nn.Sequential(*self.model)
 
     def forward(self, x):
-        return self.model(x.to(device))
+        for layer in self.model:
+            x = layer(x.to(device))
+            #print(f"Layer output shape: {x.shape}")  # Imprime el tamaño de salida de cada capa
+        return x
 
 class RecModel(nn.Module):
     def __init__(self, vocab_size, pretrain=False):
