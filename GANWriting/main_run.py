@@ -30,12 +30,12 @@ NUM_THREAD = 4
 EARLY_STOP_EPOCH = None
 EVAL_EPOCH = 10
 MODEL_SAVE_EPOCH = 10
-show_iter_num = 1000
+show_iter_num = 1
 LABEL_SMOOTH = True
 Bi_GRU = True
 VISUALIZE_TRAIN = True
 
-BATCH_SIZE = 2
+BATCH_SIZE = 4
 lr_dis = 1e-5
 lr_gen = 1e-4
 lr_rec = 1e-5

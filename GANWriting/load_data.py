@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 from torchvision import transforms
 
 
-file_path = './all_images.txt'
+file_path = '../all_images.txt'
 
 def load_musical_symbols(file_path):
     if not os.path.exists(file_path):
@@ -25,7 +25,6 @@ MUSICAL_SYMBOLS = load_musical_symbols(file_path)
 
 # Crear el diccionario de símbolos musicales
 MUSICAL_SYMBOLS_DICT = {symbol: idx for idx, symbol in enumerate(MUSICAL_SYMBOLS)}
-
 IMG_HEIGHT = 128
 IMG_WIDTH = 128
 IMG_SIZE = 128
@@ -112,7 +111,7 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0, test_split_ra
 
     print(f"\nlen(train_dataset): {len(train_dataset)}")
     print(f"\nlen(test_dataset): {len(test_dataset)}")
-
+    print(f"\nindex2letter: {index2letter}")
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader

@@ -58,17 +58,22 @@ def write_image(xg, pred_label, gt_img, gt_label, title):
         for j in range(num_tokens):
             gt_text = list(filter(lambda x: x != j, gt_text))
             pred_text = list(filter(lambda x: x != j, pred_text))
+        print(f"gt_text: {gt_text}")
+        gt_text_str = ''.join([index2letter[c] for c in gt_text])
+        pred_text_str = ''.join([index2letter[c] for c in pred_text])
+        print(f"title: {title}")
+        print(f"GT Text: {gt_text_str}")
+        print(f"Predicted Text: {pred_text_str}")
 
-        gt_text = ''.join([index2letter[c - num_tokens] for c in gt_text])
-        pred_text = ''.join([index2letter[c - num_tokens] for c in pred_text])
         gt_text_img = np.zeros_like(tar)
         pred_text_img = np.zeros_like(tar)
-        cv2.putText(gt_text_img, gt_text, (5, 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-        cv2.putText(pred_text_img, pred_text, (5, 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        cv2.putText(gt_text_img, gt_text_str, (5, 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        cv2.putText(pred_text_img, pred_text_str, (5, 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         out = np.vstack([gt, gt_text_img, tar, pred_text_img])
         outs.append(out)
     final_out = np.hstack(outs)
     cv2.imwrite(folder + '/' + title + '.png', final_out)
+
 
 def assign_adain_params(adain_params, model):
     # assign the adain_params to the AdaIN layers in model
