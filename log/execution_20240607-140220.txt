@@ -1,3 +1,0 @@
-epo0 <tr>-<gen>: l_dis=1.33-0.78, l_rec=0.56-0.55, cer=9.56-9.41-9.41, ssim=0.3194, time=99324.8
-epo0 <tr>: cer=18.82, ssim=0.3194
-epo0 <te>: cer=0.61, ssim=0.3804

@@ -30,28 +30,18 @@ NUM_THREAD = 4
 
 EARLY_STOP_EPOCH = None
 EVAL_EPOCH = 2
-MODEL_SAVE_EPOCH = 2
-show_iter_num = 1000
+MODEL_SAVE_EPOCH = 4
+show_iter_num = 1500
 LABEL_SMOOTH = True
 Bi_GRU = True
 VISUALIZE_TRAIN = True
 
-BATCH_SIZE = 2
-lr_dis = 1e-5
-lr_gen = 1e-4
+BATCH_SIZE = 28
+lr_dis = 5e-5
+lr_gen = 1e-5
 lr_rec = 1e-5
 
 CurriculumModelID = args.start_epoch
-def debug_train_data(train_data_list):
-    tr_img, tr_label = train_data_list
-    print(f"tr_img: {tr_img.shape}, tr_label: {tr_label}")
-    for i in range(len(tr_img)):
-        img = tr_img[i].cpu().numpy().squeeze()
-        label = tr_label[i].cpu().item()
-        print(f"Label: {label}, Image min: {img.min()}, max: {img.max()}")
-        plt.imshow(img, cmap='gray')
-        plt.title(f"Label: {label}")
-        plt.show()
 def all_data_loader():
     train_loader, test_loader = load_data_func(OOV)
     train_loader = torch.utils.data.DataLoader(dataset=train_loader.dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
@@ -66,16 +56,6 @@ def balance_data_loader(loader):
     counter = Counter(labels)
     print(f"Label distribution: {counter}")
 
-def debug_train_data(train_data_list, stage="Original"):
-    tr_img, tr_label = train_data_list
-    print(f"{stage} - tr_img: {tr_img.shape}, tr_label: {tr_label}")
-    for i in range(len(tr_img)):
-        img = tr_img[i].cpu().numpy().squeeze()
-        label = tr_label[i].cpu().item()
-        print(f"{stage} - Label: {label}, Image min: {img.min()}, max: {img.max()}")
-        plt.imshow(img, cmap='gray')
-        plt.title(f"{stage} - Label: {label}")
-        plt.show()
 
 def compute_ssim(img1, img2):
     """Compute SSIM between two images."""
@@ -136,23 +116,18 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
         loss_rec.append(l_rec.cpu().item())
         loss_rec_tr.append(l_rec_tr.cpu().item())
         # valores de gradientes para detectar anomalias
-        for name, param in model.named_parameters():
-            if param.grad is not None:
-                pass
+        #for name, param in model.named_parameters():
+        #    if param.grad is not None:
+        #        pass
                 #print(f'{name} gradient mean: {param.grad.mean()}, gradient max: {param.grad.max()}, gradient min: {param.grad.min()}')
 
-        # Asegúrate de que los datos no tengan valores anómalos
-        for data in train_data_list:
-            if torch.isnan(data).any() or torch.isinf(data).any():
-                print(f'Anomalous data detected in batch {i}')
-
         # Chequear valores de pérdida
-        if torch.isnan(l_rec_tr).any() or torch.isinf(l_rec_tr).any():
-            print(f'l_rec_tr: Anomalous loss detected in rec_update at batch {i}')
-        if torch.isnan(l_dis_tr).any() or torch.isinf(l_dis_tr).any():
-            print(f'ls_dis_tr: Anomalous loss detected in dis_update at batch {i}')
-        if torch.isnan(l_total).any() or torch.isinf(l_total).any():
-            print(f'ls_total: Anomalous loss detected in gen_update at batch {i}')
+        #if torch.isnan(l_rec_tr).any() or torch.isinf(l_rec_tr).any():
+        #    print(f'l_rec_tr: Anomalous loss detected in rec_update at batch {i}')
+        #if torch.isnan(l_dis_tr).any() or torch.isinf(l_dis_tr).any():
+        #    print(f'ls_dis_tr: Anomalous loss detected in dis_update at batch {i}')
+        #if torch.isnan(l_total).any() or torch.isinf(l_total).any():
+        #    print(f'ls_total: Anomalous loss detected in gen_update at batch {i}')
 
         # Calcular SSIM
         with torch.no_grad():

@@ -25,9 +25,9 @@ class ConTranModel(nn.Module):
 
     def forward(self, train_data_list, epoch, mode, cer_func=None):
         tr_img, tr_label = train_data_list
-        print(f"tr_img: {tr_img}")
+        #print(f"tr_img: {tr_img}")
         tr_img = tr_img.to(device)
-        print(f"tr_label: {tr_label}")
+        #print(f"tr_label: {tr_label}")
         tr_label = tr_label.to(device)
 
         if tr_label.dim() == 1:
@@ -60,6 +60,9 @@ class ConTranModel(nn.Module):
 
             l_fake = self.dis.calc_dis_fake_loss(generated_img)
             l_fake.backward(retain_graph=True)
+
+            gp = self.dis.gradient_penalty(sample_img, generated_img)
+            gp.backward(retain_graph=True)
 
             l_total = l_real + l_fake
             if self.iter_num % self.show_iter_num == 0:

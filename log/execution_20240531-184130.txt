@@ -1,2 +1,0 @@
-epo0 <tr>: cer=70.46, ssim=0.1374
-epo0 <te>: cer=45.84, ssim=0.1474

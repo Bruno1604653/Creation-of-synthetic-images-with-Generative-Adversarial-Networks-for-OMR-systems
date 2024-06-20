@@ -33,7 +33,7 @@ def fine(label_list):
         return label_list
 
 def write_image(xg, pred_label, gt_img, gt_label, title):
-    folder = 'imgs_alldataset'
+    folder = '/data2fast/users/bfajardo/imgs_alldataset'
     if not os.path.exists(folder):
         os.makedirs(folder)
     batch_size = gt_label.shape[0]
@@ -59,8 +59,8 @@ def write_image(xg, pred_label, gt_img, gt_label, title):
             gt_text = list(filter(lambda x: x != j, gt_text))
             pred_text = list(filter(lambda x: x != j, pred_text))
 
-        gt_text = ''.join([index2letter[c - num_tokens] for c in gt_text])
-        pred_text = ''.join([index2letter[c - num_tokens] for c in pred_text])
+        gt_text = ''.join([index2letter[c] for c in gt_text])
+        pred_text = ''.join([index2letter[c] for c in pred_text])
         gt_text_img = np.zeros_like(tar)
         pred_text_img = np.zeros_like(tar)
         cv2.putText(gt_text_img, gt_text, (5, 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
@@ -119,7 +119,8 @@ class DisModel(nn.Module):
         cnn_c = [
             nn.Flatten(),
             nn.Linear(flattened_size, self.final_size),
-            nn.LeakyReLU(0.2, inplace=False)
+            nn.LeakyReLU(0.2, inplace=False),
+            nn.Dropout(p=0.5)
         ]
         self.cnn_c = nn.Sequential(*cnn_c)
         self.bce = nn.BCEWithLogitsLoss()
@@ -151,6 +152,24 @@ class DisModel(nn.Module):
         resp_fake = self.forward(input_fake)
         fake_loss = self.bce(resp_fake, label)
         return fake_loss
+    def gradient_penalty(self, real_data, generated_data):
+        batch_size = real_data.size(0)
+        epsilon = torch.rand(batch_size, 1, 1, 1).to(real_data.device)
+        interpolated = epsilon * real_data + (1 - epsilon) * generated_data
+        interpolated.requires_grad_(True)
+        d_interpolated = self.forward(interpolated)
+        grad_outputs = torch.ones_like(d_interpolated)
+        gradients = torch.autograd.grad(
+            outputs=d_interpolated,
+            inputs=interpolated,
+            grad_outputs=grad_outputs,
+            create_graph=True,
+            retain_graph=True,
+            only_inputs=True,
+        )[0]
+        gradients = gradients.view(batch_size, -1)
+        gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean()
+        return gradient_penalty
 
 
 class GenModel_FC(nn.Module):
@@ -175,9 +194,12 @@ class ImageEncoder(nn.Module):
         super(ImageEncoder, self).__init__()
         self.model = vgg19_bn(False).to(device)
         self.output_dim = 512
+        self.dropout = nn.Dropout(p=0.5)
 
     def forward(self, x):
-        return self.model(x.to(device))
+        x = self.model(x.to(device))
+        x = self.dropout(x)
+        return x
 
 
 class Decoder(nn.Module):
@@ -189,7 +211,8 @@ class Decoder(nn.Module):
         for i in range(ups):
             self.model += [
                 nn.Upsample(scale_factor=2),  # Duplicar resolución en cada paso
-                Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='in', activation=activ, pad_type=pad_type)
+                Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='in', activation=activ, pad_type=pad_type),
+                nn.Dropout(p=0.5)
             ]
             dim //= 2
         self.model += [
