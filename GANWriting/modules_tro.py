@@ -33,7 +33,7 @@ def fine(label_list):
         return label_list
 
 def write_image(xg, pred_label, gt_img, gt_label, title):
-    folder = '/data2fast/users/bfajardo/imgs_alldataset'
+    folder = '/data2fast/users/bfajardo/imgs_common_classes'
     if not os.path.exists(folder):
         os.makedirs(folder)
     batch_size = gt_label.shape[0]
@@ -120,7 +120,7 @@ class DisModel(nn.Module):
             nn.Flatten(),
             nn.Linear(flattened_size, self.final_size),
             nn.LeakyReLU(0.2, inplace=False),
-            nn.Dropout(p=0.5)
+            nn.Dropout(p=0.3)
         ]
         self.cnn_c = nn.Sequential(*cnn_c)
         self.bce = nn.BCEWithLogitsLoss()

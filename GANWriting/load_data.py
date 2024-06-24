@@ -5,7 +5,6 @@ import torch
 from torch.utils.data import Dataset, DataLoader, random_split
 from torchvision import transforms
 
-
 file_path = './all_images.txt'
 
 def load_musical_symbols(file_path):
@@ -36,8 +35,11 @@ tokens = {
     'UNK_TOKEN': 3
 }
 
-# Agregar los símbolos musicales a los tokens
-for i, symbol in enumerate(MUSICAL_SYMBOLS):
+# Clases de interés
+TARGET_CLASSES = {'sharp', 'quarter-rest', 'tie-slur', 'quarter-note'}
+
+# Agregar las clases de interés a los tokens
+for i, symbol in enumerate(TARGET_CLASSES):
     tokens[symbol] = i + 4
 
 index2letter = {v: k for k, v in tokens.items()}
@@ -48,9 +50,10 @@ NUM_CHANNEL = 3
 print(f"vocab_size: {vocab_size}")
 
 class MusicSymbolDataset(Dataset):
-    def __init__(self, data_dirs, transform=None):
+    def __init__(self, data_dirs, target_classes, transform=None):
         global tokens
         self.data_dirs = data_dirs
+        self.target_classes = target_classes
         self.transform = transform or transforms.Compose([
             transforms.Resize((IMG_HEIGHT, IMG_WIDTH)),
             transforms.Grayscale(num_output_channels=1),
@@ -65,8 +68,8 @@ class MusicSymbolDataset(Dataset):
                 continue
             for symbol in os.listdir(data_dir):
                 symbol_dir = os.path.join(data_dir, symbol)
-                if os.path.isdir(symbol_dir):
-                    symbol_lower = symbol.lower()
+                symbol_lower = symbol.lower()
+                if symbol_lower in self.target_classes and os.path.isdir(symbol_dir):
                     if symbol_lower not in tokens:
                         tokens[symbol_lower] = len(tokens)
                     if symbol_lower not in self.classes:
@@ -78,10 +81,9 @@ class MusicSymbolDataset(Dataset):
                             png_count += 1
                             self.data.append((os.path.join(symbol_dir, img_file), tokens[symbol_lower]))
                             print(f"Añadido: {os.path.join(symbol_dir, img_file)}")
-                    #print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
+                    print(f"Archivos .png encontrados en {symbol_dir}: {png_count}")
                 else:
-                    pass
-                    #print(f"Directorio no encontrado para símbolo: {symbol_dir}")
+                    print(f"Clase no encontrada o no es un directorio: {symbol_lower}")
         print(f"Ejemplo data: {self.data[0]}")
         print(f"tokens: {tokens}")
         print(f"Total de imágenes encontradas: {len(self.data)}")
@@ -94,7 +96,6 @@ class MusicSymbolDataset(Dataset):
         img_path, label = self.data[idx]
         image = Image.open(img_path).convert('L')
         image = self.transform(image)
-        #print(f"Loaded image shape: {image.shape}")  # Add this line to print the shape of each loaded image
         return image, label
 
 def loadData(oov, directories=None, batch_size=128, num_workers=0, test_split_ratio=0.2):
@@ -102,7 +103,8 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0, test_split_ra
         directories = ['/data2fast/users/bfajardo/datasets/dataset1/dataset1', '/data2fast/users/bfajardo/datasets/dataset2/dataset2',
 '/data2fast/users/bfajardo/datasets/data/images','/data2fast/users/bfajardo/datasets/data/muscima_pp_raw','/data2fast/users/bfajardo/datasets/data/open_omr_raw']
 
-    dataset = MusicSymbolDataset(directories)
+
+    dataset = MusicSymbolDataset(directories, TARGET_CLASSES)
 
     if len(dataset) == 0:
         raise ValueError("El dataset está vacío")
@@ -118,4 +120,3 @@ def loadData(oov, directories=None, batch_size=128, num_workers=0, test_split_ra
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
-

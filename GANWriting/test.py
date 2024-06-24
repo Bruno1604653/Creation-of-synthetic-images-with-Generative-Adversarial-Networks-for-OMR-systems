@@ -5,15 +5,18 @@ from PIL import Image
 directories = [
     './dataset1',
     './dataset2',
-    './data/open_omr_raw', 
+    './data/open_omr_raw',
     './data/images',
-    './data/muscima_pp_raw'
+    #'./data/muscima_pp_raw'
 ]
 
+# Clases de interés
+TARGET_CLASSES = {'sharp', 'quarter-rest', 'tie-slur', 'quarter-note'}
+
 # Función para listar todas las imágenes en los directorios especificados y obtener las clases
-def list_images_in_directories(directories):
+def list_images_in_directories(directories, target_classes):
     all_images = {}
-    classes = set()
+    seen_images = set()
     total_images = 0
     for data_dir in directories:
         if not os.path.exists(data_dir):
@@ -22,32 +25,30 @@ def list_images_in_directories(directories):
         print(f"Procesando directorio: {data_dir}")
         for class_name in os.listdir(data_dir):
             class_dir = os.path.join(data_dir, class_name)
-            if os.path.isdir(class_dir):
-                class_lower = class_name.lower()
-                classes.add(class_lower)
+            class_lower = class_name.lower()
+            if class_lower in target_classes and os.path.isdir(class_dir):
                 if class_lower not in all_images:
                     all_images[class_lower] = []
                 png_count = 0
                 for img_file in os.listdir(class_dir):
                     if img_file.lower().endswith('.png'):
                         img_path = os.path.join(class_dir, img_file)
-                        all_images[class_lower].append(img_path)
-                        png_count += 1
-                        total_images += 1
+                        if img_path not in seen_images:
+                            all_images[class_lower].append(img_path)
+                            seen_images.add(img_path)
+                            png_count += 1
+                            total_images += 1
                 print(f"Archivos .png encontrados en {class_dir}: {png_count}")
             else:
-                print(f"Directorio no encontrado para clase: {class_dir}")
-    return all_images, classes, total_images
+                print(f"Clase no encontrada o no es un directorio: {class_dir}")
+    return all_images, total_images
 
 # Ejecutar la función y obtener todas las imágenes y clases
-all_images, classes, total_images = list_images_in_directories(directories)
+all_images, total_images = list_images_in_directories(directories, TARGET_CLASSES)
 
 # Mostrar el total de imágenes encontradas por clase
 for class_name, images in all_images.items():
     print(f"Clase: {class_name}, Total de imágenes: {len(images)}")
-
-# Mostrar las clases encontradas
-print(f"Clases encontradas: {sorted(classes)}")
 
 # Mostrar el total de imágenes encontradas
 print(f"Total de imágenes encontradas: {total_images}")
