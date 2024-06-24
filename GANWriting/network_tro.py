@@ -83,6 +83,8 @@ class ConTranModel(nn.Module):
             return l_rec
 
         elif mode == 'eval':
+            self.gen.eval()
+            self.rec.eval()
             with torch.no_grad():
                 generated_img = self.gen(tr_img)
                 pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
