@@ -120,7 +120,7 @@ class DisModel(nn.Module):
             nn.Flatten(),
             nn.Linear(flattened_size, self.final_size),
             nn.LeakyReLU(0.2, inplace=False),
-            nn.Dropout(p=0.5)
+            nn.Dropout(p=0.3)
         ]
         self.cnn_c = nn.Sequential(*cnn_c)
         self.bce = nn.BCEWithLogitsLoss()
@@ -194,7 +194,7 @@ class ImageEncoder(nn.Module):
         super(ImageEncoder, self).__init__()
         self.model = vgg19_bn(False).to(device)
         self.output_dim = 512
-        self.dropout = nn.Dropout(p=0.5)
+        self.dropout = nn.Dropout(p=0.3)
 
     def forward(self, x):
         x = self.model(x.to(device))
@@ -212,7 +212,7 @@ class Decoder(nn.Module):
             self.model += [
                 nn.Upsample(scale_factor=2),  # Duplicar resolución en cada paso
                 Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='in', activation=activ, pad_type=pad_type),
-                nn.Dropout(p=0.5)
+                nn.Dropout(p=0.3)
             ]
             dim //= 2
         self.model += [

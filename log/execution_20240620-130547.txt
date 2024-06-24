@@ -8,3 +8,6 @@ epo22 <tr>: cer=0.03, ssim=0.2674
 epo22 <te>: cer=0.01, ssim=0.3651
 epo23 <tr>-<gen>: l_dis=0.74-2.93, l_rec=0.08-0.08, cer=0.02-0.01-0.01, ssim=0.4069, time=6723.4
 epo23 <tr>: cer=0.03, ssim=0.4069
+epo24 <tr>-<gen>: l_dis=0.72-3.14, l_rec=0.08-0.08, cer=0.02-0.01-0.01, ssim=0.4761, time=6805.2
+epo24 <tr>: cer=0.03, ssim=0.4761
+epo24 <te>: cer=0.01, ssim=0.4741
