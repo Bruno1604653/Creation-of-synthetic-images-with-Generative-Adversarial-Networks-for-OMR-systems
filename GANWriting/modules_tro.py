@@ -152,7 +152,7 @@ class DisModel(nn.Module):
         resp_fake = self.forward(input_fake)
         fake_loss = self.bce(resp_fake, label)
         return fake_loss
-    def gradient_penalty(self, real_data, generated_data):
+    def gradient_penalty(self, real_data, generated_data, reduction_factor=0.3):
         batch_size = real_data.size(0)
         epsilon = torch.rand(batch_size, 1, 1, 1).to(real_data.device)
         interpolated = epsilon * real_data + (1 - epsilon) * generated_data
@@ -169,7 +169,7 @@ class DisModel(nn.Module):
         )[0]
         gradients = gradients.view(batch_size, -1)
         gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean()
-        return gradient_penalty
+        return gradient_penalty * reduction_factor
 
 
 class GenModel_FC(nn.Module):
