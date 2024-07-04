@@ -65,11 +65,8 @@ def write_image(xg, pred_label, gt_img, gt_label, title):
         print(f"GT Text: {gt_text_str}")
         print(f"Predicted Text: {pred_text_str}")
 
-<<<<<<< HEAD
-=======
         gt_text = ''.join([index2letter[c] for c in gt_text])
         pred_text = ''.join([index2letter[c] for c in pred_text])
->>>>>>> cvc_branch2
         gt_text_img = np.zeros_like(tar)
         pred_text_img = np.zeros_like(tar)
         cv2.putText(gt_text_img, gt_text_str, (5, 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
@@ -220,12 +217,8 @@ class Decoder(nn.Module):
         for i in range(ups):
             self.model += [
                 nn.Upsample(scale_factor=2),  # Duplicar resolución en cada paso
-<<<<<<< HEAD
-                Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='in', activation=activ, pad_type=pad_type)
-=======
                 Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='in', activation=activ, pad_type=pad_type),
                 nn.Dropout(p=0.3)
->>>>>>> cvc_branch2
             ]
             dim //= 2
         self.model += [
