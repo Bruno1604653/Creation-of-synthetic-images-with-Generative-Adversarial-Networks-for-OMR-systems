@@ -1,0 +1,13 @@
+epo0 <tr>-<gen>: l_dis=0.48-2.38, l_rec=4.89-4.84, cer=5.77-5.57-5.57, ssim=0.0120, time=1484.2
+epo0 <tr>: cer=11.13, ssim=0.0120
+epo0 <te>: cer=0.00, ssim=0.1203
+epo1 <tr>-<gen>: l_dis=0.51-2.03, l_rec=0.14-0.14, cer=0.00-0.00-0.00, ssim=0.0889, time=1426.0
+epo1 <tr>: cer=0.00, ssim=0.0889
+epo2 <tr>-<gen>: l_dis=0.60-1.66, l_rec=0.10-0.10, cer=0.00-0.00-0.00, ssim=0.2147, time=1426.5
+epo2 <tr>: cer=0.00, ssim=0.2147
+epo2 <te>: cer=0.00, ssim=0.2796
+epo3 <tr>-<gen>: l_dis=0.60-1.79, l_rec=0.08-0.08, cer=0.00-0.00-0.00, ssim=0.3622, time=1510.5
+epo3 <tr>: cer=0.00, ssim=0.3622
+epo4 <tr>-<gen>: l_dis=0.72-1.60, l_rec=0.07-0.07, cer=0.00-0.00-0.00, ssim=0.4390, time=1509.2
+epo4 <tr>: cer=0.00, ssim=0.4390
+epo4 <te>: cer=0.00, ssim=0.4865
