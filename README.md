@@ -77,4 +77,7 @@ El archivo `MusicSymbolClassifier_master.ipynb` proporciona un notebook de Jupyt
 2. Entrenar el clasificador con los datos sintéticos generados.
 3. Entrenar el clasificador con una combinación de datos originales y sintéticos.
 
+Los avances con MusicSymbolClassifier_master.ipynb se han realizado desde google colab.
+https://drive.google.com/drive/folders/1I-a-twy3_3EQS_r2dWHWbxmTLaDfOUS_?usp=sharing
+
 Estas pruebas ayudarán a evaluar el impacto de los datos sintéticos en el rendimiento del sistema de OMR.
