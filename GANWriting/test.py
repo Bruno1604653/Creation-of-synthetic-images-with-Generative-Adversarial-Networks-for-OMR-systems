@@ -3,10 +3,10 @@ from PIL import Image
 
 # Directorios de los datasets
 directories = [
-    './dataset1',
-    './dataset2',
-    './data/open_omr_raw',
-    './data/images',
+    '/data2fast/users/bfajardo/datasets/dataset1/dataset1',
+    '/data2fast/users/bfajardo/datasets/dataset2/dataset2',
+    '/data2fast/users/bfajardo/datasets/data/open_omr_raw',
+    '/data2fast/users/bfajardo/datasets/data/images',
     #'./data/muscima_pp_raw'
 ]
 
