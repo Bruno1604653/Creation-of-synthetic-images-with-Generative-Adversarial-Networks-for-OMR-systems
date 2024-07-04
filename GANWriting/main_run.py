@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from torch.cuda.amp import GradScaler
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import time
 import argparse
 from torchvision import transforms
@@ -28,20 +29,31 @@ OOV = True
 NUM_THREAD = 4
 
 EARLY_STOP_EPOCH = None
+<<<<<<< HEAD
 EVAL_EPOCH = 10
 MODEL_SAVE_EPOCH = 10
 show_iter_num = 1
+=======
+EVAL_EPOCH = 2
+MODEL_SAVE_EPOCH = 10
+show_iter_num = 1500
+>>>>>>> cvc_branch2
 LABEL_SMOOTH = True
 Bi_GRU = True
 VISUALIZE_TRAIN = True
 
+<<<<<<< HEAD
 BATCH_SIZE = 4
 lr_dis = 1e-5
 lr_gen = 1e-4
+=======
+BATCH_SIZE = 28
+lr_dis = 5e-5
+lr_gen = 1e-5
+>>>>>>> cvc_branch2
 lr_rec = 1e-5
 
 CurriculumModelID = args.start_epoch
-
 def all_data_loader():
     train_loader, test_loader = load_data_func(OOV)
     train_loader = torch.utils.data.DataLoader(dataset=train_loader.dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
@@ -56,6 +68,7 @@ def balance_data_loader(loader):
     counter = Counter(labels)
     print(f"Label distribution: {counter}")
 
+<<<<<<< HEAD
 def debug_train_data(train_data_list, stage="Original"):
     tr_img, tr_label = train_data_list
     print(f"{stage} - tr_img: {tr_img.shape}, tr_label: {tr_label}")
@@ -66,6 +79,8 @@ def debug_train_data(train_data_list, stage="Original"):
         plt.imshow(img, cmap='gray')
         plt.title(f"{stage} - Label: {label}")
         plt.show()
+=======
+>>>>>>> cvc_branch2
 
 def compute_ssim(img1, img2):
     """Compute SSIM between two images."""
@@ -125,6 +140,19 @@ def train(train_loader, model, dis_opt, gen_opt, rec_opt, epoch, log_file):
         loss_dis_tr.append(l_dis_tr.cpu().item())
         loss_rec.append(l_rec.cpu().item())
         loss_rec_tr.append(l_rec_tr.cpu().item())
+        # valores de gradientes para detectar anomalias
+        #for name, param in model.named_parameters():
+        #    if param.grad is not None:
+        #        pass
+                #print(f'{name} gradient mean: {param.grad.mean()}, gradient max: {param.grad.max()}, gradient min: {param.grad.min()}')
+
+        # Chequear valores de pérdida
+        #if torch.isnan(l_rec_tr).any() or torch.isinf(l_rec_tr).any():
+        #    print(f'l_rec_tr: Anomalous loss detected in rec_update at batch {i}')
+        #if torch.isnan(l_dis_tr).any() or torch.isinf(l_dis_tr).any():
+        #    print(f'ls_dis_tr: Anomalous loss detected in dis_update at batch {i}')
+        #if torch.isnan(l_total).any() or torch.isinf(l_total).any():
+        #    print(f'ls_total: Anomalous loss detected in gen_update at batch {i}')
 
         # Asegúrate de que los datos no tengan valores anómalos
         for data in train_data_list:
@@ -196,7 +224,11 @@ def test(test_loader, epoch, modelFile_o_model):
         loss_dis.append(l_dis.cpu().item())
         loss_rec.append(l_rec.cpu().item())
 
+<<<<<<< HEAD
         # Calcular SSIM
+=======
+        # Calcular SSIM -- Pendiente de implementar.
+>>>>>>> cvc_branch2
         with torch.no_grad():
             # Generar las imágenes
             generated_imgs = model.gen(tr_img)
@@ -289,3 +321,5 @@ if __name__ == '__main__':
     train_loader, test_loader = all_data_loader()
     main(train_loader, test_loader)
     print(time.ctime())
+
+

@@ -8,5 +8,8 @@ dataset2
 datasets
 __pycache__
 GANWriting/__pycache__imgs/
-save_weights/
+GANWriting/exp_1.ipynb
+GANWriting/read_logs.ipynb
+GANWriting/imagenes_generadas
 imgs
+save_weights

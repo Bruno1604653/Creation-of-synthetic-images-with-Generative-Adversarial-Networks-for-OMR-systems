@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch import nn
 import torch.autograd
 
-torch.autograd.set_detect_anomaly(True)
+#torch.autograd.set_detect_anomaly(True)
 
 device = torch.device('cpu' if not torch.cuda.is_available() else 'cuda')
 

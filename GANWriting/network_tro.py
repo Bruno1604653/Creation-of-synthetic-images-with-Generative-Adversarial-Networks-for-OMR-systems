@@ -25,7 +25,9 @@ class ConTranModel(nn.Module):
 
     def forward(self, train_data_list, epoch, mode, cer_func=None):
         tr_img, tr_label = train_data_list
+        #print(f"tr_img: {tr_img}")
         tr_img = tr_img.to(device)
+        #print(f"tr_label: {tr_label}")
         tr_label = tr_label.to(device)
 
         if tr_label.dim() == 1:
@@ -59,6 +61,9 @@ class ConTranModel(nn.Module):
             l_fake = self.dis.calc_dis_fake_loss(generated_img)
             l_fake.backward(retain_graph=True)
 
+            gp = self.dis.gradient_penalty(sample_img, generated_img)
+            gp.backward(retain_graph=True)
+
             l_total = l_real + l_fake
             if self.iter_num % self.show_iter_num == 0:
                 with torch.no_grad():
@@ -66,7 +71,7 @@ class ConTranModel(nn.Module):
                 write_image(generated_img, pred_xt, tr_img, tr_label, 'epoch_' + str(epoch) + '-' + str(self.iter_num))
             return l_total
 
-        elif mode == 'rec_update':
+        elif mode == 'rec_update': # Probar de añadir la loss del reconstructor al generador para mejorar la eficiencia de la generacion.
             self.iter_num += 1
             generated_img = self.gen(tr_img)
             pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
@@ -78,6 +83,8 @@ class ConTranModel(nn.Module):
             return l_rec
 
         elif mode == 'eval':
+            self.gen.eval()
+            self.rec.eval()
             with torch.no_grad():
                 generated_img = self.gen(tr_img)
                 pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))
@@ -88,3 +95,4 @@ class ConTranModel(nn.Module):
                 if cer_func:
                     cer_func.add(pred_xt, tr_label)
             return l_dis, l_rec
+

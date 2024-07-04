@@ -1,0 +1,3 @@
+epo48 <tr>-<gen>: l_dis=0.59-2.29, l_rec=0.05-0.05, cer=0.00-0.00-0.00, ssim=0.3136, time=5559.1
+epo48 <tr>: cer=0.00, ssim=0.3136
+epo48 <te>: cer=0.00, ssim=0.2760
