@@ -71,7 +71,7 @@ class ConTranModel(nn.Module):
                 write_image(generated_img, pred_xt, tr_img, tr_label, 'epoch_' + str(epoch) + '-' + str(self.iter_num))
             return l_total
 
-        elif mode == 'rec_update':
+        elif mode == 'rec_update': # Probar de añadir la loss del reconstructor al generador para mejorar la eficiencia de la generacion.
             self.iter_num += 1
             generated_img = self.gen(tr_img)
             pred_xt = self.rec(generated_img, tr_label, img_width=torch.from_numpy(np.array([IMG_WIDTH] * batch_size)).to(device))

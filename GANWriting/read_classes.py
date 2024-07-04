@@ -1,7 +1,6 @@
 import os
 from PIL import Image
 
-# Directorios de los datasets
 directories = [
     '/data2fast/users/bfajardo/datasets/dataset1/dataset1',
     '/data2fast/users/bfajardo/datasets/dataset2/dataset2',
@@ -10,7 +9,6 @@ directories = [
     #'./data/muscima_pp_raw'
 ]
 
-# Clases de interés
 TARGET_CLASSES = {'sharp', 'quarter-rest', 'tie-slur', 'quarter-note'}
 
 # Función para listar todas las imágenes en los directorios especificados y obtener las clases

@@ -186,7 +186,7 @@ def test(test_loader, epoch, modelFile_o_model):
         loss_dis.append(l_dis.cpu().item())
         loss_rec.append(l_rec.cpu().item())
 
-        # Calcular SSIM
+        # Calcular SSIM -- Pendiente de implementar.
         with torch.no_grad():
             # Generar las imágenes
             generated_imgs = model.gen(tr_img)
